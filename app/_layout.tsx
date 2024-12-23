@@ -15,6 +15,9 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Caprasimo: require('../assets/fonts/Caprasimo-Regular.ttf'),
+    Arimo: require('../assets/fonts/Arimo-VariableFont_wght.ttf'),
+    DMSerifText: require('../assets/fonts/DMSerifText-Regular.ttf')
   });
 
   useEffect(() => {
@@ -30,7 +33,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="signin" options={{ headerShown: false }} />
+        <Stack.Screen name="register" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
