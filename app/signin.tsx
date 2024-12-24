@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF4E0',
         paddingHorizontal: 16,
         paddingVertical: 42,
+        color: '#211B17',
     },
     backButton: {
         backgroundColor: '#6A4A36',

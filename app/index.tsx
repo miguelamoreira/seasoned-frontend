@@ -32,7 +32,7 @@ export default function HomeScreen() {
 
       <View style={styles.skipContainer}>
         <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
-          <TouchableOpacity style={styles.skipButton} activeOpacity={0.9}>
+          <TouchableOpacity style={styles.skipButton} activeOpacity={0.9} onPress={() => router.push('/homepage')}>
             <Text style={styles.buttonText}>Skip</Text>
           </TouchableOpacity>
         </Shadow>
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF4E0',
     paddingHorizontal: 16,
+    color: '#211B17'
   },
   rainbowTop: {
     position: 'absolute',
