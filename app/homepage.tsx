@@ -1,95 +1,120 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, SafeAreaView, View, Text, ScrollView } from 'react-native';
-import Swiper from 'react-native-swiper';
-import { Shadow } from 'react-native-shadow-2';
+import { StyleSheet, SafeAreaView, ScrollView, View, Text } from 'react-native';
 
+import FrankieBanner from '@/components/homepage/FrankieBanner';
+import ComingSoon from '@/components/homepage/ComingSoon';
+import PopularReviews from '@/components/homepage/PopularReviews';
+import PopularShows from '@/components/homepage/PopularShows';
+import PopularLists from '@/components/homepage/PopularLists';
+import ContinueWatching from '@/components/homepage/ContinueWatching';
+
+import ActivityTabs from '@/components/homepage/ActivityTabs';
+
+import TabMenu from '@/components/TabMenu';
 import TabBar from '@/components/Tabbar';
-
-type CardProps = {
-    imageUri: string;
-    title: string;
-    subtitle: string;
-    date: string;
-};
-
-function Card({ imageUri, title, subtitle, date }: CardProps) {
-    return (
-        <Shadow distance={6} startColor={'#211B17'} offset={[2, 4]}>
-            <View style={styles.card}>
-                <Image source={{ uri: imageUri }} style={styles.cardImage} />
-                <View style={styles.cardContent}>
-                    <Text style={styles.cardTitle}>{title}</Text>
-                    <Text style={styles.cardSubtitle}>{subtitle}</Text>
-                    <Text style={styles.cardDate}>{date}</Text>
-                </View>
-            </View>
-        </Shadow>
-    );
-}
 
 export default function HomepageScreen() {
     const [currentPage, setCurrentPage] = useState('Home');
-    const isLoggedIn = false;
+    const [activeTab, setActiveTab] = useState('Home');
+    const isLoggedIn = true;
 
     const handleNavigate = (page: string) => {
         setCurrentPage(page);
         console.log(`Navigated to: ${page}`);
     };
-    
-    const shows: CardProps[] = [
+
+    const handleTabPress = (tab: string) => {
+        setActiveTab(tab);
+        console.log(`Switched to: ${tab}`);
+    };
+
+    const shows = [
+        { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/548/1371270.jpg', title: 'YOU', subtitle: 'Season 3', date: '12th December, 2024' },
+        { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/501/1253519.jpg', title: 'Breaking Bad', subtitle: 'Season 4', date: '15th December, 2024' },
+        { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/501/1253515.jpg', title: 'Better Call Saul', subtitle: 'Season X', date: '20th December, 2024' },
+    ];
+
+    const popularReviews = [
         {
-            imageUri: 'https://via.placeholder.com/130x180',
-            title: 'YOU',
-            subtitle: 'Season 3',
-            date: '12th December, 2024',
-        },
-        {
-            imageUri: 'https://via.placeholder.com/130x180',
-            title: 'Breaking Bad',
-            subtitle: 'Season 4',
-            date: '15th December, 2024',
-        },
-        {
-            imageUri: 'https://via.placeholder.com/130x180',
-            title: 'Better Call Saul',
-            subtitle: 'Season X',
-            date: '20th December, 2024',
+            imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/4/11308.jpg',
+            title: 'Gilmore Girls',
+            year: 2000,
+            review: `If season seven has a million haters, then I am one of them. If season seven has ten haters, then I am one of them. If season seven has only one hater, then that is me.`,
+            likes: 2346,
+            comments: 60,
+            username: 'jane_doe',
+            avatarUri: 'https://placehold.jp/30x30.png',
+            liked: false,
         },
     ];
 
+    const [popularShows, setPopularShows] = useState([
+        { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/249/623354.jpg' },
+        { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/211/528026.jpg' },
+        { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/499/1247570.jpg' },
+        { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/498/1245274.jpg' },
+    ]);
+
+    const [popularLists, setPopularLists] = useState([
+        {
+            title: 'I want to KMS',
+            items: [
+                { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/192/482341.jpg' },
+                { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/499/1247735.jpg' },
+                { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/536/1340281.jpg' },
+                { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/249/623354.jpg' },
+            ],
+            likes: 9536,
+            liked: false,
+        },
+    ]);
+
+    const episodeData = {
+        title: "Una tradición familiar",
+        seasonEpisode: "S-5 E-10",
+        duration: "76 min",
+        seriesTitle: "La Casa de Papel",
+        imageUri: "https://static.tvmaze.com/uploads/images/large_landscape/380/950352.jpg",
+    };
+    
+    const handleUnfollow = () => {
+        console.log("Unfollow button clicked");
+    };
+    
+    const handleLog = () => {
+        console.log("Log button clicked");
+    };
+
     return (
         <SafeAreaView style={styles.mainContainer}>
-            <ScrollView>
-                <View style={styles.frankieContainer}>
-                    <View style={styles.frankieContent}>
-                        <Text style={styles.frankieHeading}>
-                            "The only drama I need is on screen"
-                        </Text>
-                        <Text style={styles.frankieText}>
-                            With <Text style={{ fontWeight: '700' }}>Seasoned</Text>, keep the drama where it belongs - on your favourite shows!
-                        </Text>
-                    </View>
-                    <Image source={require('../assets/images/frankie_1.png')} style={styles.frankieImage} />
-                </View>
+            <TabMenu tabs={[{ label: 'Home', icon: 'home' },{ label: 'Activity', icon: 'people' }]} activeTab={activeTab} onTabPress={handleTabPress} isLoggedIn={isLoggedIn}/>
 
-                <View style={styles.comingContainer}>
-                    <Text style={styles.heading}>Coming this week</Text>
-                    <Swiper style={styles.swiper} showsPagination={false} autoplay={true} autoplayTimeout={4}>
-                        {shows.map((show, index) => (
-                            <View key={index} style={styles.cardWrapper}>
-                                <Card imageUri={show.imageUri} title={show.title} subtitle={show.subtitle} date={show.date}/>
-                            </View>
-                        ))}
-                    </Swiper>
-                </View>
+            <ScrollView style={styles.bottomSpacing}>
+            {activeTab === 'Home' && (
+                    <>
+                        {!isLoggedIn && <FrankieBanner />}
+                        {isLoggedIn && (
+                            <ContinueWatching
+                                episode={episodeData}
+                                onUnfollow={handleUnfollow}
+                                onLog={handleLog}
+                            />
+                        )}
+                        <ComingSoon shows={shows} />
+                        <PopularReviews reviews={popularReviews} />
+                        <PopularShows shows={popularShows} />
+                        <PopularLists lists={popularLists} />
+                    </>
+                )}
+
+                {activeTab === 'Activity' && (
+                    <View style={styles.activityContainer}>
+                        <ActivityTabs></ActivityTabs>
+                    </View>
+                )}
             </ScrollView>
 
-            <TabBar
-                isLoggedIn={isLoggedIn}
-                currentPage={currentPage}
-                onNavigate={handleNavigate}
-            />
-
+            <TabBar isLoggedIn={isLoggedIn} currentPage={currentPage} onNavigate={handleNavigate}/>
         </SafeAreaView>
     );
 }
@@ -103,73 +128,19 @@ const styles = StyleSheet.create({
         color: '#211B17',
         fontFamily: 'Arimo'
     },
-    frankieContainer: {
-        flexDirection: 'row',
+    bottomSpacing: {
+        marginBottom: 20,
     },
-    frankieContent: {
-        flexDirection: 'column',
-        width: '62%',
+    activityContainer: {
+        
     },
-    frankieHeading: {
-        fontSize: 24,
-        fontFamily: 'DMSerifText',
-        width: 250,
-    },
-    frankieText: {
-        fontSize: 16,
-        top: 12,
-    },
-    frankieImage: {
-        width: 130,
-        height: 120,
-        marginVertical: 20,
-        marginHorizontal: 16,
-    },
-    comingContainer: {
-        marginTop: 20,
-    },
-    heading: {
-        fontSize: 24,
-        fontFamily: 'DMSerifText',
-        lineHeight: 45,
-    },
-    swiper: {
-        height: 160,
-        marginTop: 10,
-    },
-    cardWrapper: {
-        marginHorizontal: 8,
-    },
-    card: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#C1855F',
-        borderColor: '#211B17',
-        borderWidth: 2,
-        borderRadius: 8,
-        padding: 16,
-        width: 360,
-    },
-    cardImage: {
-        width: 80,
-        height: 110,
-        borderRadius: 8,
-    },
-    cardContent: {
-        marginLeft: 10,
-    },
-    cardTitle: {
+    activityHeading: {
         fontSize: 20,
-        color: '#FFF4E0',
-        fontFamily: 'DMSerifText',
+        fontWeight: 'bold',
+        marginBottom: 16,
     },
-    cardSubtitle: {
-        fontSize: 14,
-        color: '#FFF4E080',
-    },
-    cardDate: {
-        fontSize: 12,
-        color: '#FFF4E0',
-        top: 20,
+    placeholderText: {
+        fontSize: 16,
+        color: '#888',
     },
 });
