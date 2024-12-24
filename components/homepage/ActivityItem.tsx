@@ -16,8 +16,9 @@ export type ActivityItem = {
     image?: string;
     likedByCount?: number;
     followedUser?: string;
+    description?: string;
   };
-  isLoggedUser?: boolean; // New property to indicate if this is the logged-in user
+  isLoggedUser?: boolean;
 };
 
 type Props = {
@@ -28,20 +29,6 @@ export default function ActivityItem({ item }: Props) {
   const renderContent = () => {
     switch (item.type) {
       case 'likedReview':
-        return (
-          <View style={styles.reviewContainer}>
-            <Image source={{ uri: item.content.image }} style={styles.image} />
-            <View style={styles.textContainer}>
-              <Text style={styles.title}>{item.content.title}</Text>
-              <Text style={styles.subtitle}>{item.content.subtitle}</Text>
-              <View style={styles.ratingContainer}>
-                {[...Array(item.content.rating)].map((_, index) => (
-                  <Icon key={index} name="star" size={16} color="#FFC107" />
-                ))}
-              </View>
-            </View>
-          </View>
-        );
       case 'watchedAndRated':
         return (
           <View style={styles.reviewContainer}>
@@ -49,31 +36,29 @@ export default function ActivityItem({ item }: Props) {
             <View style={styles.textContainer}>
               <Text style={styles.title}>{item.content.title}</Text>
               <Text style={styles.subtitle}>{item.content.subtitle}</Text>
-              <View style={styles.ratingContainer}>
-                {[...Array(item.content.rating)].map((_, index) => (
-                  <Icon key={index} name="star" size={16} color="#FFC107" />
-                ))}
-              </View>
+              {item.content.description && (
+                <Text style={styles.description}>{item.content.description}</Text>
+              )}
+              {item.content.rating && (
+                <View style={styles.ratingContainer}>
+                  {[...Array(item.content.rating)].map((_, index) => (
+                    <Icon key={index} name="star" size={16} color="#D8A84E" />
+                  ))}
+                </View>
+              )}
             </View>
           </View>
         );
       case 'followed':
         return (
-          <Text style={styles.followedText}>
-            Followed {item.content.followedUser}
-          </Text>
+          null
         );
       case 'likedList':
         return (
           <View style={styles.likedListContainer}>
-            <View style={styles.listImages}>
-              {item.content.image && (
-                <Image
-                  source={{ uri: item.content.image }}
-                  style={styles.listImage}
-                />
-              )}
-            </View>
+            {item.content.image && (
+              <Image source={{ uri: item.content.image }} style={styles.listImage} />
+            )}
             <Text style={styles.listTitle}>{item.content.title}</Text>
             <Text style={styles.likes}>
               <Icon name="heart" size={16} color="#FF6B6B" />{' '}
@@ -92,8 +77,10 @@ export default function ActivityItem({ item }: Props) {
         return item.isLoggedUser ? 'You liked a review' : 'liked a review';
       case 'watchedAndRated':
         return item.isLoggedUser ? 'You watched and rated' : 'watched and rated';
-      case 'followed':
-        return item.isLoggedUser ? 'You followed' : 'followed';
+        case 'followed':
+          return item.isLoggedUser
+            ? `You followed ${item.content.followedUser}`
+            : `followed ${item.content.followedUser}`;
       case 'likedList':
         return item.isLoggedUser ? 'You liked a list' : 'liked a list';
       default:
@@ -103,13 +90,15 @@ export default function ActivityItem({ item }: Props) {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: item.user.avatar }} style={styles.avatar} />
       <View style={styles.content}>
-        <Text style={styles.user}>
-          {item.isLoggedUser ? 'You' : item.user.name}{' '}
-          <Text style={styles.action}>{getActionText(item.type)}</Text>
-        </Text>
-        {renderContent()}
+        <View style={styles.contentHeading}>
+          <Image source={{ uri: item.user.avatar }} style={styles.avatar} />
+          <Text style={styles.user}>
+            {item.isLoggedUser ? 'You' : item.user.name}{' '}
+            <Text style={styles.action}>{getActionText(item.type)}</Text>
+          </Text>
+        </View>
+        <View style={styles.contentBody}>{renderContent()}</View>
       </View>
     </View>
   );
@@ -122,15 +111,26 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
     width: 378,
+    minHeight: 40,
+    maxHeight: 180, 
+    padding: 8,
   },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 12,
+    marginRight: 8,
   },
   content: {
     flex: 1,
+    flexDirection: 'column',
+  },
+  contentHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  contentBody: {
+    marginTop: 12,
   },
   user: {
     fontSize: 14,
@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   image: {
-    width: 60,
-    height: 90,
+    width: 80,
+    height: 110,
     borderRadius: 8,
     backgroundColor: '#EEE',
   },
@@ -163,8 +163,17 @@ const styles = StyleSheet.create({
     color: '#666',
     marginVertical: 4,
   },
+  description: {
+    fontSize: 12,
+    color: '#211B1770',
+    marginBottom: 8,
+  },
   ratingContainer: {
     flexDirection: 'row',
+  },
+  followedContainer: {
+    paddingVertical: 4,
+    justifyContent: 'center',
   },
   followedText: {
     fontSize: 14,
@@ -172,9 +181,6 @@ const styles = StyleSheet.create({
   },
   likedListContainer: {
     marginTop: 6,
-  },
-  listImages: {
-    flexDirection: 'row',
   },
   listImage: {
     width: 40,

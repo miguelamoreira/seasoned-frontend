@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 import ActivityItem, { ActivityItem as ActivityItemType } from './ActivityItem';
 
-type TabKey = 'friends' | 'myActivity'; // Strictly typed keys
+type TabKey = 'friends' | 'myActivity';
 type Tab = {
   label: string;
   key: TabKey;
@@ -17,13 +17,17 @@ export default function ActivityTabs() {
       id: '1',
       user: { name: 'kpatrick', avatar: 'https://placehold.jp/30x30.png' },
       type: 'watchedAndRated',
-      content: { title: 'Glee', subtitle: '2009', rating: 4, image: 'https://example.com/glee.png' },
+      content: { title: 'Glee', subtitle: '2009', rating: 4, image: 'https://static.tvmaze.com/uploads/images/medium_portrait/0/73.jpg',
+        description: 'Great series, kinda annoying with the music all the time but great actors'
+       },
     },
     {
       id: '2',
       user: { name: 'william32', avatar: 'https://placehold.jp/30x30.png' },
       type: 'likedReview',
-      content: { title: 'Mr. Robot', subtitle: '2015', rating: 5, image: 'https://example.com/mr-robot.png' },
+      content: { title: 'Mr. Robot', subtitle: '2015', rating: 5, image: 'https://static.tvmaze.com/uploads/images/medium_portrait/211/528026.jpg',
+        description: 'Loved it!'
+       },
     },
     {
       id: '3',
@@ -41,7 +45,7 @@ export default function ActivityTabs() {
       id: '5',
       user: { name: 'You', avatar: 'https://placehold.jp/30x30.png' },
       type: 'likedReview',
-      content: { title: 'Breaking Bad', subtitle: '2008', rating: 5, image: 'https://example.com/breaking-bad.png' },
+      content: { title: 'Breaking Bad', subtitle: '2008', rating: 5, image: 'https://static.tvmaze.com/uploads/images/medium_portrait/501/1253519.jpg' },
     },
   ];
 
@@ -80,23 +84,12 @@ export default function ActivityTabs() {
     </View>
   );
 
-  const renderActivity = ({ item }: { item: ActivityItemType }) => {
-    console.log('Rendering Activity Item:', item);
-    return (
-      <View style={styles.itemContainer}>
-        <Text style={styles.itemTitle}>{item.user.name}</Text>
-        <Image source={{ uri: item.user.avatar }} style={styles.itemAvatar}></Image>
-        <Text style={styles.itemSubtitle}>{item.type}</Text>
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
       {renderTabs()}
       <FlatList
         data={activityData[selectedTab]}
-        renderItem={renderActivity}
+        renderItem={({ item }) => <ActivityItem item={item} />}
         keyExtractor={(item) => item.id}
         style={styles.list}
         nestedScrollEnabled={true}
@@ -165,5 +158,28 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 20,
-  }
+  },
+  itemHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  userName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginRight: 8,
+    color: '#333',
+  },  
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  itemImage: {
+    width: 80,
+    height: 100,
+    borderRadius: 8,
+    marginTop: 8,
+  },
 });
