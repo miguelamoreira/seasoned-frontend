@@ -7,16 +7,8 @@ import PopularReviews from '@/components/homepage/PopularReviews';
 import PopularShows from '@/components/homepage/PopularShows';
 import ContinueWatching from '@/components/homepage/ContinueWatching';
 
-import TabBar from '@/components/Tabbar';
-
 export default function HomepageScreen() {
-    const [currentPage, setCurrentPage] = useState('Home');
     const isLoggedIn = true;
-
-    const handleNavigate = (page: string) => {
-        setCurrentPage(page);
-        console.log(`Navigated to: ${page}`);
-    };
 
     const shows = [
         { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/548/1371270.jpg', title: 'YOU', subtitle: 'Season 3', date: '12th December, 2024' },
@@ -73,8 +65,6 @@ export default function HomepageScreen() {
                 <PopularReviews reviews={popularReviews} />
                 <PopularShows shows={popularShows} />
             </ScrollView>
-
-            <TabBar isLoggedIn={isLoggedIn} currentPage={currentPage} onNavigate={handleNavigate}/>
         </SafeAreaView>
     );
 }

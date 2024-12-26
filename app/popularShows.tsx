@@ -4,7 +4,6 @@ import { useRouter } from 'expo-router';
 
 import OptionsTab from '@/components/OptionsTab';
 import ShowsDisplay from '@/components/shows/ShowsDisplay';
-import TabBar from '@/components/Tabbar';
 
 const shows = [
     {
@@ -50,14 +49,7 @@ const shows = [
 ];
 
 export default function PopularShowsScreen() {
-    const [currentPage, setCurrentPage] = useState('Home');
-    const isLoggedIn = true;
     const router = useRouter();
-
-    const handleNavigate = (page: string) => {
-        setCurrentPage(page);
-        console.log(`Navigated to: ${page}`);
-    };
 
     return (
         <SafeAreaView style={styles.mainContainer}>
@@ -66,7 +58,6 @@ export default function PopularShowsScreen() {
                 <Text style={styles.heading}>Popular shows</Text>
                 <ShowsDisplay shows={shows}/>
             </View>
-            <TabBar isLoggedIn={isLoggedIn} currentPage={currentPage} onNavigate={handleNavigate}/>
         </SafeAreaView>
     );
 }

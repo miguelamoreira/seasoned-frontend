@@ -4,17 +4,9 @@ import { useRouter } from 'expo-router';
 
 import OptionsTab from '@/components/OptionsTab';
 import PopularReviews from '@/components/homepage/PopularReviews';
-import TabBar from '@/components/Tabbar';
 
 export default function PopularReviewsScreen() {
-    const [currentPage, setCurrentPage] = useState('Home');
-    const isLoggedIn = true;
     const router = useRouter();
-    
-    const handleNavigate = (page: string) => {
-        setCurrentPage(page);
-        console.log(`Navigated to: ${page}`);
-    };
 
     const popularReviews = [
         {
@@ -50,7 +42,6 @@ export default function PopularReviewsScreen() {
                 <Text style={styles.heading}>Popular Reviews</Text>
                 <PopularReviews reviews={popularReviews} showHeading={false}></PopularReviews>
             </View>
-            <TabBar isLoggedIn={isLoggedIn} currentPage={currentPage} onNavigate={handleNavigate}/>
         </SafeAreaView>
     )
 }
