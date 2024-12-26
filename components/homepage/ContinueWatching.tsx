@@ -64,7 +64,9 @@ export default function ContinueWatching({ episode, onUnfollow, onLog }: Continu
       <Animated.View {...panResponder.panHandlers} style={[ { transform: [{ translateX }] } ]}>
         <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
         <View style={ styles.episodeContainer }>
-          <Image style={styles.episodeImage} resizeMode="cover" source={{ uri: episode.imageUri }}/>
+          <Shadow distance={2} startColor={'#211B17'} offset={[10, 4]}>
+            <Image style={styles.episodeImage} resizeMode="cover" source={{ uri: episode.imageUri }}/>
+          </Shadow>
           <View style={styles.episodeDetails}>
             <Text style={styles.episodeTitle}>{episode.title}</Text>
             <View style={styles.episodeMetaContainer}>
@@ -83,7 +85,7 @@ export default function ContinueWatching({ episode, onUnfollow, onLog }: Continu
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: 194,
+    height: 196,
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 16,
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#211B17',
     width: 98, 
-    height: 120,
+    height: 115,
   },
   unfollowButton: {
     backgroundColor: "#ee6363",

@@ -8,7 +8,7 @@ type TabBarProps = {
     onNavigate: (page: string) => void;
 };
 
-function TabBar(props: TabBarProps) {
+export default function TabBar(props: TabBarProps) {
     const { isLoggedIn, currentPage, onNavigate } = props;
 
     const tabs = isLoggedIn
@@ -34,8 +34,6 @@ function TabBar(props: TabBarProps) {
         </View>
     );
 }
-
-export default TabBar;
 
 const styles = StyleSheet.create({
     container: {

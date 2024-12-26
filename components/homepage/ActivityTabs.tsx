@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF4E0',
     paddingVertical: 6,
     borderRadius: 16,
-    marginHorizontal: 16,
     marginTop: 16,
   },
   tab: {
@@ -133,53 +132,6 @@ const styles = StyleSheet.create({
     color: '#211B17' 
   },
   list: { 
-    padding: 16 
-  },
-  itemContainer: {
-    padding: 10,
-    marginVertical: 6,
-    backgroundColor: '#FFF',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-  },
-  itemTitle: { 
-    fontSize: 16, 
-    fontWeight: 'bold' 
-  },
-  itemSubtitle: { 
-    fontSize: 14, 
-    color: '#555' 
-  },
-  itemAvatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 20,
-  },
-  itemHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  userName: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginRight: 8,
-    color: '#333',
-  },  
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 8,
-  },
-  itemImage: {
-    width: 80,
-    height: 100,
-    borderRadius: 8,
-    marginTop: 8,
-  },
+    paddingVertical: 16 
+  }
 });

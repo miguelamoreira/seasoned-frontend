@@ -37,6 +37,8 @@ export default function RootLayout() {
         <Stack.Screen name="signin" options={{ headerShown: false }} />
         <Stack.Screen name="register" options={{ headerShown: false }} />
         <Stack.Screen name="homepage" options={{ headerShown: false }} />
+        <Stack.Screen name="popularReviews" options={{ headerShown: false }} />
+        <Stack.Screen name="popularShows" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

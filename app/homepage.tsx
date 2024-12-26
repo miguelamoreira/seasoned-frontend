@@ -5,27 +5,17 @@ import FrankieBanner from '@/components/homepage/FrankieBanner';
 import ComingSoon from '@/components/homepage/ComingSoon';
 import PopularReviews from '@/components/homepage/PopularReviews';
 import PopularShows from '@/components/homepage/PopularShows';
-import PopularLists from '@/components/homepage/PopularLists';
 import ContinueWatching from '@/components/homepage/ContinueWatching';
 
-import ActivityTabs from '@/components/homepage/ActivityTabs';
-
-import TabMenu from '@/components/TabMenu';
 import TabBar from '@/components/Tabbar';
 
 export default function HomepageScreen() {
     const [currentPage, setCurrentPage] = useState('Home');
-    const [activeTab, setActiveTab] = useState('Home');
     const isLoggedIn = true;
 
     const handleNavigate = (page: string) => {
         setCurrentPage(page);
         console.log(`Navigated to: ${page}`);
-    };
-
-    const handleTabPress = (tab: string) => {
-        setActiveTab(tab);
-        console.log(`Switched to: ${tab}`);
     };
 
     const shows = [
@@ -39,6 +29,7 @@ export default function HomepageScreen() {
             imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/4/11308.jpg',
             title: 'Gilmore Girls',
             year: 2000,
+            rating: 5,
             review: `If season seven has a million haters, then I am one of them. If season seven has ten haters, then I am one of them. If season seven has only one hater, then that is me.`,
             likes: 2346,
             comments: 60,
@@ -53,20 +44,6 @@ export default function HomepageScreen() {
         { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/211/528026.jpg' },
         { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/499/1247570.jpg' },
         { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/498/1245274.jpg' },
-    ]);
-
-    const [popularLists, setPopularLists] = useState([
-        {
-            title: 'I want to KMS',
-            items: [
-                { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/192/482341.jpg' },
-                { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/499/1247735.jpg' },
-                { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/536/1340281.jpg' },
-                { imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/249/623354.jpg' },
-            ],
-            likes: 9536,
-            liked: false,
-        },
     ]);
 
     const episodeData = {
@@ -87,31 +64,14 @@ export default function HomepageScreen() {
 
     return (
         <SafeAreaView style={styles.mainContainer}>
-            <TabMenu tabs={[{ label: 'Home', icon: 'home' },{ label: 'Activity', icon: 'people' }]} activeTab={activeTab} onTabPress={handleTabPress} isLoggedIn={isLoggedIn}/>
-
-            <ScrollView style={styles.bottomSpacing}>
-            {activeTab === 'Home' && (
-                    <>
-                        {!isLoggedIn && <FrankieBanner />}
-                        {isLoggedIn && (
-                            <ContinueWatching
-                                episode={episodeData}
-                                onUnfollow={handleUnfollow}
-                                onLog={handleLog}
-                            />
-                        )}
-                        <ComingSoon shows={shows} />
-                        <PopularReviews reviews={popularReviews} />
-                        <PopularShows shows={popularShows} />
-                        <PopularLists lists={popularLists} />
-                    </>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                {!isLoggedIn && <FrankieBanner />}
+                {isLoggedIn && (
+                    <ContinueWatching episode={episodeData} onUnfollow={handleUnfollow} onLog={handleLog}/>
                 )}
-
-                {activeTab === 'Activity' && (
-                    <View style={styles.activityContainer}>
-                        <ActivityTabs></ActivityTabs>
-                    </View>
-                )}
+                <ComingSoon shows={shows} />
+                <PopularReviews reviews={popularReviews} />
+                <PopularShows shows={popularShows} />
             </ScrollView>
 
             <TabBar isLoggedIn={isLoggedIn} currentPage={currentPage} onNavigate={handleNavigate}/>
@@ -124,23 +84,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFF4E0',
         paddingHorizontal: 16,
-        paddingVertical: 42,
+        paddingTop: 42,
         color: '#211B17',
-        fontFamily: 'Arimo'
+        fontFamily: 'Arimo',
     },
-    bottomSpacing: {
-        marginBottom: 20,
+    scrollContainer: {
+        flex: 1,
     },
-    activityContainer: {
-        
-    },
-    activityHeading: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 16,
-    },
-    placeholderText: {
-        fontSize: 16,
-        color: '#888',
+    scrollContent: {
+        paddingBottom: 80, 
     },
 });

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Star from 'react-native-vector-icons/AntDesign';
+import { useRouter } from 'expo-router';
 
 type Review = {
     imageUri: string;
@@ -13,17 +15,21 @@ type Review = {
     username: string;
     avatarUri: string;
     liked: boolean;
+    rating: number;
 };
 
 type PopularReviewsProps = {
     reviews: Review[];
+    showHeading?: boolean;
 };
 
-export default function PopularReviews({ reviews }: PopularReviewsProps) {
+export default function PopularReviews({ reviews, showHeading = true }: PopularReviewsProps) {
     const [popularReviews, setPopularReviews] = useState(reviews);
+    const router = useRouter();
 
     const handleSeeAll = (section: string) => {
         console.log(`Navigated to all items in ${section}`);
+        router.push('/popularReviews');
     };
 
     const toggleLike = (index: number) => {
@@ -36,24 +42,33 @@ export default function PopularReviews({ reviews }: PopularReviewsProps) {
 
     return (
         <View style={styles.popularContainer}>
-            <View style={styles.sectionHeader}>
-                <Text style={styles.heading}>Popular reviews</Text>
-                <TouchableOpacity onPress={() => handleSeeAll('Popular Reviews')} style={styles.seeAllContainer}>
-                    <Text style={styles.seeAllText}>See all</Text>
-                    <Icon name="chevron-forward" size={16} color="#211B17" />
-                </TouchableOpacity>
-            </View>
-            {reviews.map((review, index) => (
-                <Shadow key={index} distance={2} startColor={'#211B17'} offset={[3, 4]}>
-                    <View style={styles.reviewCard}>
+            {showHeading && (
+                <View style={styles.sectionHeader}>
+                    <Text style={styles.heading}>Popular reviews</Text>
+                    <TouchableOpacity onPress={() => handleSeeAll('Popular Reviews')} style={styles.seeAllContainer}>
+                        <Text style={styles.seeAllText}>See all</Text>
+                        <Icon name="chevron-forward" size={16} color="#211B17" />
+                    </TouchableOpacity>
+                </View>
+            )}
+            {popularReviews.map((review, index) => (
+                <Shadow key={index} distance={2} startColor={'#211B17'} offset={[2, 4]} style={popularReviews.length > 1 && { marginBottom: 20 }}>
+                    <View style={[ styles.reviewCard, popularReviews.length > 1 && { marginBottom: 2 }]}>
                         <View style={styles.topRow}>
                             <View style={styles.leftSection}>
-                                <Image source={{ uri: review.imageUri }} style={styles.reviewImage} />
+                                <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
+                                    <Image source={{ uri: review.imageUri }} style={styles.reviewImage}/>
+                                </Shadow>
                             </View>
                             <View style={styles.rightSection}>
                                 <View style={styles.reviewSeries}>
                                     <Text style={styles.reviewSeriesTitle}>{review.title}</Text>
                                     <Text style={styles.reviewSeriesYear}>{review.year}</Text>
+                                </View>
+                                <View style={styles.stars}>
+                                    {Array.from({ length: 5 }, (_, index) => (
+                                        <Star key={index} name={index < review.rating ? 'star' : 'staro'} size={18} color="#D8A84E"/>
+                                    ))}
                                 </View>
                                 <Text style={styles.reviewText}>{review.review}</Text>
                             </View>
@@ -75,7 +90,10 @@ export default function PopularReviews({ reviews }: PopularReviewsProps) {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                                <Text style={styles.reviewStats}>{review.comments} 💬</Text>
+                                <View style={styles.commentContainer}>
+                                    <Text style={styles.reviewStats}>{review.comments}</Text>
+                                    <Icon name="chatbubble-outline" size={18} color="#211B17" style={styles.icon}/>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -114,7 +132,8 @@ const styles = StyleSheet.create({
         borderColor: '#211B17',
         borderWidth: 2,
         borderRadius: 8,
-        padding: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 16,
         width: 374,
     },
     topRow: {
@@ -125,11 +144,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     reviewImage: {
-        width: 80,
-        height: 110,
+        width: 90,
+        height: 130,
         borderRadius: 8,
         borderWidth: 2,
         borderColor: '#211B17',
+        marginBottom: 8
     },
     rightSection: {
         flex: 1,
@@ -154,6 +174,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginBottom: 8,
         color: '#211B1790',
+    },
+    stars: {
+        flexDirection: 'row',
+        gap: 2, 
     },
     bottomRow: {
         flexDirection: 'row',
@@ -187,7 +211,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+    commentContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     icon: {
         marginLeft: 4,
     },
 });
+

@@ -18,7 +18,9 @@ function Card({ imageUri, title, subtitle, date }: CardProps) {
     return (
         <Shadow distance={6} startColor={'#211B17'} offset={[2, 4]}>
             <View style={styles.card}>
-                <Image source={{ uri: imageUri }} style={styles.cardImage} />
+                <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
+                    <Image source={{ uri: imageUri }} style={styles.cardImage} />
+                </Shadow>
                 <View style={styles.cardContent}>
                     <Text style={styles.cardType}>Premiere</Text>
                     <Text style={styles.cardTitle}>{title}</Text>
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         flex: 1,
         width: 400,
-        height: 200
+        height: 230
     },
     heading: {
         fontSize: 24,
@@ -71,12 +73,12 @@ const styles = StyleSheet.create({
         borderColor: '#211B17',
         borderWidth: 2,
         borderRadius: 8,
-        padding: 8,
+        padding: 16,
         width: 368,
     },
     cardImage: {
-        width: 80,
-        height: 120,
+        width: 90,
+        height: 130,
         borderRadius: 8,
         borderWidth: 2,
         borderColor: '#211B17'
