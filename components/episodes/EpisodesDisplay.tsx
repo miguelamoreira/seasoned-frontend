@@ -47,16 +47,11 @@ export default function EpisodesDisplay({ episodes, type }: EpisodesProps) {
                     <Text style={styles.episodeSeason}>
                         Season {item.season} Episode {item.episode}
                     </Text>
-                    <View style={styles.bottomRow}>
-                        <Text style={styles.episodeDate}>{item.date}</Text>
-                    </View>
                 </View>
             ) : (
                 <View style={styles.middleRow}>
                     <View style={styles.episodeDetails}>
-                        <Text style={styles.episodeTitle}>
-                            Episode {item.episode}
-                        </Text>
+                        <Text style={styles.episodeTitle}>Episode {item.episode}</Text>
                         <View style={styles.ratingContainer}>
                             <Text style={styles.showRating}>{item.rating}</Text>
                             <AntDesign name="star" size={20} color="#D8A84E" />
@@ -122,13 +117,6 @@ const styles = StyleSheet.create({
     },
     episodeSeason: {
         fontSize: 14,
-        color: '#211B1770',
-    },
-    bottomRow: {
-        marginTop: 16,
-    },
-    episodeDate: {
-        fontSize: 12,
         color: '#211B1770',
     },
     middleRow: {

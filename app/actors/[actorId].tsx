@@ -17,6 +17,8 @@ export default function ActorScreen() {
         id: actorId,
         name: 'Ben Lawson',
         dateOfBirth: '06-02-1980',
+        country: 'Australia',
+        genre: 'Masculine',
         bio: 'Ben Lawson is an Australian actor known for participating in Firefly Lane.',
         image: 'https://static.tvmaze.com/uploads/images/medium_portrait/8/20174.jpg', 
         shows: [
@@ -47,7 +49,9 @@ export default function ActorScreen() {
 
             <View style={styles.actorInfoContainer}>
                 <Text style={styles.bioHeading}>Bio</Text>
-                <Text style={styles.actorBio}>{actor.bio}</Text>
+                <Text style={styles.actorBio}>
+                    {actor.name} is an {actor.genre === 'Feminine' ? 'actress' : 'actor'} from {actor.country} known for participating in {actor.shows[0].title}.
+                </Text>
             </View>
 
             <View style={styles.appearsInContainer}>

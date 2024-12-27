@@ -115,6 +115,7 @@ export default function SearchScreen() {
                                             break;
                                         case 'series':
                                             console.log(`/series/${item.id}`);
+                                            router.push(`/series/${item.id}`);
                                             break;
                                     }
                                 }}
