@@ -7,6 +7,7 @@ import ShowsDisplay from '@/components/shows/ShowsDisplay';
 
 const shows = [
     {
+        id: 1,
         image: 'https://static.tvmaze.com/uploads/images/medium_portrait/249/623354.jpg',
         title: 'Normal People',
         year: 2020,
@@ -15,6 +16,7 @@ const shows = [
         rating: 4.2,
     },
     {
+        id: 2,
         image: 'https://static.tvmaze.com/uploads/images/medium_portrait/211/528026.jpg',
         title: 'Mr. Robot',
         year: 2015,
@@ -23,6 +25,7 @@ const shows = [
         rating: 3.5,
     },
     {
+        id: 3,
         image: 'https://static.tvmaze.com/uploads/images/medium_portrait/499/1247570.jpg',
         title: 'Gossip Girl',
         year: 2007,
@@ -31,6 +34,7 @@ const shows = [
         rating: 2.5,
     },
     {
+        id: 4,
         image: 'https://static.tvmaze.com/uploads/images/medium_portrait/498/1245274.jpg',
         title: 'Game of Thrones',
         year: 2011,
@@ -39,6 +43,7 @@ const shows = [
         rating: 5.0,
     },
     {
+        id: 5,
         image: 'https://static.tvmaze.com/uploads/images/medium_portrait/501/1253515.jpg',
         title: 'Better Call Saul',
         year: 2015,
@@ -56,7 +61,7 @@ export default function PopularShowsScreen() {
             <View style={styles.contentContainer}>
                 <OptionsTab type="back" onBackPress={() => router.push('/homepage')} />
                 <Text style={styles.heading}>Popular shows</Text>
-                <ShowsDisplay shows={shows}/>
+                <ShowsDisplay shows={shows} type='default'/>
             </View>
         </SafeAreaView>
     );

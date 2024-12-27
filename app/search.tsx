@@ -17,18 +17,18 @@ export default function SearchScreen() {
     const [selectedFilter, setSelectedFilter] = useState<string | null>(null); 
 
     const genres = [
-        { name: 'Comedy', onPress: () => router.push(`/genre/${'Comedy'}`) },
-        { name: 'Drama', onPress: () => router.push(`/genre/${'Drama'}`) },
-        { name: 'Science-Fiction', onPress: () => router.push(`/genre/${'Science-Fiction'}`) },
-        { name: 'Thriller', onPress: () => router.push(`/genre/${'Thriller'}`) },
-        { name: 'Action', onPress: () => router.push(`/genre/${'Action'}`) },
-        { name: 'Crime', onPress: () => router.push(`/genre/${'Crime'}`) },
-        { name: 'Horror', onPress: () => router.push(`/genre/${'Horror'}`) },
-        { name: 'Romance', onPress: () => router.push(`/genre/${'Romance'}`) },
-        { name: 'Adventure', onPress: () => router.push(`/genre/${'Adventure'}`) },
-        { name: 'Music', onPress: () => router.push(`/genre/${'Music'}`) },
-        { name: 'Mystery', onPress: () => router.push(`/genre/${'Mystery'}`) },
-        { name: 'Supernatural', onPress: () => router.push(`/genre/${'Supernatural'}`) },
+        { name: 'Comedy', onPress: () => router.push(`/genres/${'Comedy'}`) },
+        { name: 'Drama', onPress: () => router.push(`/genres/${'Drama'}`) },
+        { name: 'Science-Fiction', onPress: () => router.push(`/genres/${'Science-Fiction'}`) },
+        { name: 'Thriller', onPress: () => router.push(`/genres/${'Thriller'}`) },
+        { name: 'Action', onPress: () => router.push(`/genres/${'Action'}`) },
+        { name: 'Crime', onPress: () => router.push(`/genres/${'Crime'}`) },
+        { name: 'Horror', onPress: () => router.push(`/genres/${'Horror'}`) },
+        { name: 'Romance', onPress: () => router.push(`/genres/${'Romance'}`) },
+        { name: 'Adventure', onPress: () => router.push(`/genres/${'Adventure'}`) },
+        { name: 'Music', onPress: () => router.push(`/genres/${'Music'}`) },
+        { name: 'Mystery', onPress: () => router.push(`/genres/${'Mystery'}`) },
+        { name: 'Supernatural', onPress: () => router.push(`/genres/${'Supernatural'}`) },
     ];
 
     const filters = [

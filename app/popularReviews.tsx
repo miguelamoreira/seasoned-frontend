@@ -3,14 +3,15 @@ import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import OptionsTab from '@/components/OptionsTab';
-import PopularReviews from '@/components/homepage/PopularReviews';
+import ReviewsDisplay from '@/components/reviews/ReviewsDisplay';
 
 export default function PopularReviewsScreen() {
     const router = useRouter();
 
     const popularReviews = [
         {
-            imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/4/11308.jpg',
+            id: 1,
+            image: 'https://static.tvmaze.com/uploads/images/medium_portrait/4/11308.jpg',
             title: 'Gilmore Girls',
             year: 2000,
             rating: 5,
@@ -22,7 +23,8 @@ export default function PopularReviewsScreen() {
             liked: false,
         },
         {
-            imageUri: 'https://static.tvmaze.com/uploads/images/medium_portrait/548/1371270.jpg',
+            id: 2,
+            image: 'https://static.tvmaze.com/uploads/images/medium_portrait/548/1371270.jpg',
             title: 'You',
             year: 2018,
             rating: 5,
@@ -40,7 +42,7 @@ export default function PopularReviewsScreen() {
             <View style={styles.contentContainer}>
                 <OptionsTab type="back" onBackPress={() => router.push('/homepage')}></OptionsTab>
                 <Text style={styles.heading}>Popular Reviews</Text>
-                <PopularReviews reviews={popularReviews} showHeading={false}></PopularReviews>
+                <ReviewsDisplay reviews={popularReviews} type="notOwn"></ReviewsDisplay>
             </View>
         </SafeAreaView>
     )
