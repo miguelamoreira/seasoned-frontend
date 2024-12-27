@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, TextInput, View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, StyleSheet, View, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import SearchBar from '@/components/search/SearchBar';
+import SearchSuggestions from '@/components/search/SearchSuggestions';
 import GenresDisplay from '@/components/shows/GenreDisplay';
-import EmptyState from '@/components/EmptyState';
-import FilterTabs from '@/components/FilterTabs'; 
+import FilterTabs from '@/components/FilterTabs';
+
+import ActorsDisplay from '@/components/actors/ActorsDisplay';
+import UsersDisplay from '@/components/users/UsersDisplay';
+import ShowsDisplay from '@/components/shows/ShowsDisplay';
 
 export default function SearchScreen() {
     const router = useRouter();
-
     const [isFocused, setIsFocused] = useState(false);
-    const [recentSearches, setRecentSearches] = useState<string[]>([]); 
-    const [filteredSearches, setFilteredSearches] = useState<string[]>(recentSearches); 
-    const [selectedFilter, setSelectedFilter] = useState<string | null>(null); 
+    const [recentSearches, setRecentSearches] = useState<string[]>(['Actor A', 'User B', 'Series C', 'User X']);
+    const [filteredSearches, setFilteredSearches] = useState<string[]>(recentSearches);
+    const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+    const [searchText, setSearchText] = useState('');
 
     const genres = [
         { name: 'Comedy', onPress: () => router.push(`/genres/${'Comedy'}`) },
@@ -33,9 +36,9 @@ export default function SearchScreen() {
 
     const filters = [
         { label: 'All', key: null },
-        { label: 'Actors', key: 'actors' },
+        { label: 'Actors', key: 'actor' },
         { label: 'Series', key: 'series' },
-        { label: 'Users', key: 'users' },
+        { label: 'Users', key: 'user' },
     ];
 
     const handleSearchFocus = () => {
@@ -46,67 +49,105 @@ export default function SearchScreen() {
         setIsFocused(false);
     };
 
+    const handleSearchChange = (text: string) => {
+        setSearchText(text);
+    };
+
     const handleFilterChange = (filter: string | null) => {
         setSelectedFilter(filter);
-
-        if (!filter) {
-            setFilteredSearches(recentSearches);
-        } else {
-            const lowercasedFilter = filter.toLowerCase();
-            setFilteredSearches(
-                recentSearches.filter((search) =>
-                    search.toLowerCase().includes(lowercasedFilter)
-                )
-            );
-        }
     };
+
+    useEffect(() => {
+        const filtered = recentSearches.filter((search) => {
+            const searchTextMatch = search.toLowerCase().includes(searchText.toLowerCase());
+            if (selectedFilter) {
+                return searchTextMatch && search.toLowerCase().includes(selectedFilter.toLowerCase());
+            }
+            return searchTextMatch;
+        });
+        setFilteredSearches(filtered);
+    }, [searchText, selectedFilter]);
+
+    const handleSearchSelect = (search: string) => {
+        console.log(search);
+    };
+
+    // Dummy Data for actors, users, and shows
+    const actors = [
+        {
+            id: 1,
+            name: 'Actor One',
+            dateOfBirth: '1980-01-01',
+            country: 'USA',
+            series: ['Show 1', 'Show 2'],
+            image: 'https://via.placeholder.com/80x120',
+        },
+        {
+            id: 2,
+            name: 'Actor Two',
+            dateOfBirth: '1985-01-01',
+            country: 'Canada',
+            series: ['Show 3', 'Show 4'],
+            image: 'https://via.placeholder.com/80x120',
+        },
+    ];
+
+    const users = [
+        { id: 1, image: 'https://via.placeholder.com/80x80', username: 'User1', following: true },
+        { id: 2, image: 'https://via.placeholder.com/80x80', username: 'User2', following: false },
+        { id: 3, image: 'https://via.placeholder.com/80x80', username: 'User3', following: false },
+    ];
+
+    const shows = [
+        {
+            id: 1,
+            image: 'https://via.placeholder.com/80x120',
+            title: 'Show One',
+            year: 2022,
+            seasons: 3,
+            creator: 'Creator 1',
+            rating: 8.5,
+            progress: 50,
+            date: '2024-01-01',
+        },
+        {
+            id: 2,
+            image: 'https://via.placeholder.com/80x120',
+            title: 'Show Two',
+            year: 2024,
+            seasons: 2,
+            creator: 'Creator 2',
+            rating: 7.2,
+            date: '2024-06-01',
+        },
+    ];
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.searchBarContainer}>
-                <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
-                    <View style={styles.searchBar}>
-                        <Ionicons name="search" size={20} color="#FFF4E0" style={styles.searchIcon} />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Search"
-                            placeholderTextColor="#FFF4E080"
-                            onFocus={handleSearchFocus}
-                            onBlur={handleSearchBlur}
-                        />
-                    </View>
-                </Shadow>
-            </View>
+            <SearchBar 
+                onFocus={handleSearchFocus} 
+                onBlur={handleSearchBlur} 
+                onChange={handleSearchChange} 
+            />
 
-            {isFocused ? (
+            {isFocused && (searchText || recentSearches.length > 0) ? (
                 <View style={styles.suggestionsContainer}>
-                    <FilterTabs
-                        tabs={filters}
-                        onTabChange={handleFilterChange}
-                        allowNoneSelected={true}
-                        initialTab={null}
-                    />
-                    <Text style={styles.sectionTitle}>Recent searches</Text>
-                    {filteredSearches.length === 0 ? (
-                        <EmptyState type="recentSearches" />
-                    ) : (
-                        <FlatList
-                            data={filteredSearches}
-                            keyExtractor={(item, index) => `${item}-${index}`}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity style={styles.recentSearchItem}>
-                                    <Text style={styles.recentSearchText}>{item}</Text>
-                                </TouchableOpacity>
-                            )}
-                        />
-                    )}
+                    <FilterTabs tabs={filters} onTabChange={handleFilterChange} allowNoneSelected={true} initialTab={null} />
+                    <SearchSuggestions filteredSearches={filteredSearches} handleSearchSelect={handleSearchSelect} />
+                    {selectedFilter === 'actor' || selectedFilter === null ? (
+                        <ActorsDisplay actors={actors} />
+                    ) : selectedFilter === 'user' ? (
+                        <UsersDisplay users={users} currentUser={users[0]} type="search" />
+                    ) : selectedFilter === 'series' ? (
+                        <ShowsDisplay shows={shows} type="default" />
+                    ) : null}
                 </View>
             ) : (
                 <GenresDisplay genres={genres} />
             )}
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -114,65 +155,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF4E0',
         paddingHorizontal: 16,
         paddingTop: 110,
-    },
-    searchBarContainer: {
-        position: 'absolute',
-        top: 42,
-        left: 0,
-        right: 0,
-        zIndex: 10,
-        backgroundColor: '#FFF4E0',
-        paddingTop: 16,
-        paddingBottom: 8,
-        paddingHorizontal: 16,
-    },
-    searchBar: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#403127',
-        paddingVertical: 10,
-        borderRadius: 8,
-        height: 48,
-        width: 378,
-    },
-    searchIcon: {
-        marginHorizontal: 12,
-    },
-    input: {
-        flex: 1,
-        color: '#FFF4E0',
-        fontSize: 16,
-        height: 48,
-        textAlignVertical: 'center',
+        justifyContent: 'flex-start',
     },
     suggestionsContainer: {
         flex: 1,
-    },
-    sectionTitle: {
-        fontSize: 20,
-        fontFamily: 'DMSerifText',
-        marginTop: 8,
-    },
-    emptyState: {
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    emptyStateImage: {
-        width: 150,
-        height: 150,
-        marginBottom: 16,
-    },
-    emptyStateText: {
-        fontSize: 16,
-        color: '#777777',
-        textAlign: 'center',
-    },
-    recentSearchItem: {
-        paddingVertical: 8,
-        borderBottomWidth: 1,
-        borderBottomColor: '#EEEEEE',
-    },
-    recentSearchText: {
-        fontSize: 16,
+        backgroundColor: '#FFF4E0',
     },
 });
