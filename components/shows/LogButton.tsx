@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Alert } from 'react-native';
 import { AntDesign, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { Shadow } from 'react-native-shadow-2';
 
-export default function LogButton({ onModalToggle, navigation }: { onModalToggle: (isOpen: boolean) => void; navigation: any }) {
+type LogButtonProps = {
+    onModalToggle: (isOpen: boolean) => void;
+    navigation: any;
+    type: 'episode' | 'series';  // Type of item: 'episode' or 'series'
+};
+
+export default function LogButton({ onModalToggle, navigation, type }: LogButtonProps) {
     const [modalVisible, setModalVisible] = useState(false);
     const [rating, setRating] = useState(0);
     const [liked, setLiked] = useState(false);
     const [isFollowed, setIsFollowed] = useState(false);
     const [isWatched, setIsWatched] = useState(false);
     const [isInWatchlist, setIsInWatchlist] = useState(false);
+    const router = useRouter();
 
     const handleRatingPress = (index: number) => {
         setRating(index + 1);
@@ -33,17 +41,73 @@ export default function LogButton({ onModalToggle, navigation }: { onModalToggle
 
     const openModal = () => {
         setModalVisible(true);
-        onModalToggle(true); 
+        onModalToggle(true);
     };
 
     const closeModal = () => {
         setModalVisible(false);
-        onModalToggle(false); 
+        onModalToggle(false);
     };
 
     const goToLogReview = () => {
         closeModal();
-        navigation.navigate('LogReviewScreen'); // Replace with your actual screen name
+        router.push('/testPage');
+    };
+
+    const renderEpisodeOptions = () => {
+        return (
+            <>
+                <TouchableOpacity onPress={toggleWatched} style={styles.optionRow}>
+                    <FontAwesome
+                        name={isWatched ? 'eye' : 'eye-slash'}
+                        size={24}
+                        color="#82AA59"
+                    />
+                    <Text style={styles.optionText}>{isWatched ? 'Unwatch' : 'Watched'}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={goToLogReview} style={styles.optionRow}>
+                    <MaterialIcons name="rate-review" size={24} color="#82AA59" />
+                    <Text style={styles.optionText}>Log / Review</Text>
+                </TouchableOpacity>
+            </>
+        );
+    };
+
+    const renderSeriesOptions = () => {
+        return (
+            <>
+                <TouchableOpacity onPress={toggleFollow} style={styles.optionRow}>
+                    <FontAwesome
+                        name={isFollowed ? 'bookmark' : 'bookmark-o'}
+                        size={24}
+                        color="#82AA59"
+                    />
+                    <Text style={styles.optionText}>{isFollowed ? 'Unfollow show' : 'Follow show'}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={toggleWatched} style={styles.optionRow}>
+                    <FontAwesome
+                        name={isWatched ? 'eye' : 'eye-slash'}
+                        size={24}
+                        color="#82AA59"
+                    />
+                    <Text style={styles.optionText}>{isWatched ? 'Unwatch' : 'Watched'}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={goToLogReview} style={styles.optionRow}>
+                    <MaterialIcons name="rate-review" size={24} color="#82AA59" />
+                    <Text style={styles.optionText}>Log / Review</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={toggleWatchlist} style={styles.optionRow}>
+                    <AntDesign
+                        name={isInWatchlist ? 'clockcircle' : 'clockcircleo'}
+                        size={24}
+                        color="#82AA59"
+                    />
+                    <Text style={styles.optionText}>
+                        {isInWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}
+                    </Text>
+                </TouchableOpacity>
+            </>
+        );
     };
 
     return (
@@ -95,36 +159,7 @@ export default function LogButton({ onModalToggle, navigation }: { onModalToggle
                             </TouchableOpacity>
                         </View>
 
-                        <TouchableOpacity onPress={toggleFollow} style={styles.optionRow}>
-                            <FontAwesome
-                                name={isFollowed ? 'bookmark' : 'bookmark-o'}
-                                size={24}
-                                color="#82AA59"
-                            />
-                            <Text style={styles.optionText}>{isFollowed ? 'Unfollow show' : 'Follow show'}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={toggleWatched} style={styles.optionRow}>
-                            <FontAwesome
-                                name={isWatched ? 'eye' : 'eye-slash'}
-                                size={24}
-                                color="#82AA59"
-                            />
-                            <Text style={styles.optionText}>{isWatched ? 'Unwatch' : 'Watched'}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={goToLogReview} style={styles.optionRow}>
-                            <MaterialIcons name="rate-review" size={24} color="#82AA59" />
-                            <Text style={styles.optionText}>Log / Review</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={toggleWatchlist} style={styles.optionRow}>
-                            <AntDesign
-                                name={isInWatchlist ? 'clockcircle' : 'clockcircleo'}
-                                size={24}
-                                color="#82AA59"
-                            />
-                            <Text style={styles.optionText}>
-                                {isInWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}
-                            </Text>
-                        </TouchableOpacity>
+                        {type === 'episode' ? renderEpisodeOptions() : renderSeriesOptions()}
                     </View>
                 </View>
             </Modal>
@@ -138,7 +173,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: '#5E4228',
-        paddingVertical: 12,
+        paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 20,
         borderWidth: 2,

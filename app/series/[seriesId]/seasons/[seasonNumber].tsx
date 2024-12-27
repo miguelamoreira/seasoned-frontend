@@ -11,7 +11,7 @@ export default function SeasonScreen() {
     const router = useRouter();
 
     const seasonTitle = `Season ${seasonNumber} (Mr. Robot)`;
-    const seasonProgress = 0.7; // Example progress
+    const seasonProgress = 0.7; 
     const episodes = [
         { id: 1, image: 'https://via.placeholder.com/100', title: 'Episode 1', year: 2015, season: 1, episode: 1, rating: 4.3, watched: true },
         { id: 2, image: 'https://via.placeholder.com/100', title: 'Episode 2', year: 2015, season: 1, episode: 2, rating: 4.1, watched: true },
@@ -24,7 +24,7 @@ export default function SeasonScreen() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <OptionsTab type="back" />
+            <OptionsTab type="back" onBackPress={() => router.push(`/series/${seriesId}`)}/>
             <Text style={styles.heading}>{seasonTitle}</Text>
             <Progress.Bar
                 progress={seasonProgress}
@@ -35,7 +35,7 @@ export default function SeasonScreen() {
                 unfilledColor="#352A23"
                 style={styles.progressBar}
             />
-            <EpisodesDisplay episodes={episodes} type="series" />
+            <EpisodesDisplay episodes={episodes} type="series" seriesId={seriesId} seasonNumber={seasonNumber} />
         </SafeAreaView>
     );
 }

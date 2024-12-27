@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useRouter } from 'expo-router';
 import { Shadow } from 'react-native-shadow-2';
 
 type Episode = {
@@ -21,9 +22,13 @@ type EpisodeType = 'default' | 'series';
 type EpisodesProps = {
     episodes: Episode[];
     type: EpisodeType;
+    seriesId: string;
+    seasonNumber: string;
 };
 
-export default function EpisodesDisplay({ episodes, type }: EpisodesProps) {
+export default function EpisodesDisplay({ episodes, type, seriesId, seasonNumber }: EpisodesProps) {
+    const router = useRouter();
+
     const [watchedEpisodes, setWatchedEpisodes] = useState<number[]>(
         episodes.filter((episode) => episode.watched).map((episode) => episode.id)
     );
@@ -32,6 +37,10 @@ export default function EpisodesDisplay({ episodes, type }: EpisodesProps) {
         setWatchedEpisodes((prev) =>
             prev.includes(episodeId) ? prev.filter((id) => id !== episodeId) : [...prev, episodeId]
         );
+    };
+
+    const handleNavigateToEpisode = (episodeId: number) => {
+        router.push(`/series/${seriesId}/seasons/${seasonNumber}/${episodeId}`);
     };
 
     const renderShow = ({ item }: { item: Episode }) => (
@@ -65,7 +74,7 @@ export default function EpisodesDisplay({ episodes, type }: EpisodesProps) {
                                 color={watchedEpisodes.includes(item.id) ? '#82AA59' : '#82AA5950'}
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleNavigateToEpisode(item.id)}>
                             <FontAwesome name="chevron-right" size={24} color="#211B17" />
                         </TouchableOpacity>
                     </View>

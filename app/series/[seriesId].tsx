@@ -8,7 +8,7 @@ import SeriesDetails from '@/components/series/SeriesDetails';
 import SeriesBio from '@/components/series/SeriesBio';
 import SeriesCast from '@/components/series/SeriesCast';
 import SeriesSeasons from '@/components/series/SeriesSeasons';
-import SeriesReviews from '@/components/series/SeriesReviews';
+import ReviewsContainer from '@/components/shows/ReviewsContainer';
 import SeriesAlert from '@/components/series/SeriesAlert';
 import LogButton from '@/components/shows/LogButton';
 
@@ -64,13 +64,13 @@ export default function SeriesScreen() {
             case 'alert':
                 return <SeriesAlert release={series.release}></SeriesAlert>
             case 'logButton':
-                return <LogButton onModalToggle={handleModalState} navigation={undefined} />;
+                return <LogButton onModalToggle={handleModalState} navigation={undefined} type="series"/>
             case 'cast':
                 return <SeriesCast cast={series.cast} />;
             case 'seasons':
                 return <SeriesSeasons seasons={series.seasons} seriesId={series.id} />;
             case 'reviews':
-                return <SeriesReviews reviews={series.reviews} />;
+                return <ReviewsContainer reviews={series.reviews} type={'series'} seriesId={seriesId} />;
             default:
                 return null;
         }
