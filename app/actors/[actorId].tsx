@@ -5,7 +5,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import OptionsTab from '@/components/OptionsTab';
 
 export default function ActorScreen() {
-    const { actorName } = useLocalSearchParams<{ actorName: string }>();
+    const { actorId } = useLocalSearchParams<{ actorId: string }>();
     const router = useRouter();
 
     const [actor, setActor] = useState('');
@@ -14,7 +14,7 @@ export default function ActorScreen() {
         <SafeAreaView style={styles.mainContainer}>
             <View style={styles.contentContainer}>
                 <OptionsTab type="back" onBackPress={() => router.push('/search')} />
-                <Text style={styles.heading}>{actorName}</Text>
+                <Text style={styles.heading}>{actorId}</Text>
             </View>
         </SafeAreaView>
     );

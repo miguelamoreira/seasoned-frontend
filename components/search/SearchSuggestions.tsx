@@ -1,48 +1,47 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import EmptyState from '@/components/EmptyState';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-type SearchSuggestionsProps = {
-    filteredSearches: string[];
-    handleSearchSelect: (search: string) => void;
-};
+interface SearchSuggestionProps {
+    filteredSearches: Array<
+        | { id: number; name: string; dateOfBirth: string; country: string; series: string[]; image: string } // Actors
+        | { id: number; image: string; username: string; following: boolean } // Users
+        | { id: number; image: string; title: string; year: number; seasons: number; creator: string; rating: number; date: string } // Shows
+    >;
+    handleSearchSelect: (search: any) => void;
+}
 
-export default function SearchSuggestions({ filteredSearches, handleSearchSelect }: SearchSuggestionsProps) {
+export default function SearchSuggestions({ filteredSearches, handleSearchSelect }: SearchSuggestionProps) {
     return (
         <View style={styles.suggestionsContainer}>
-            <Text style={styles.sectionTitle}>Recent searches</Text>
-            {filteredSearches.length === 0 ? (
-                <EmptyState type="recentSearches" />
-            ) : (
-                <FlatList
-                    data={filteredSearches}
-                    keyExtractor={(item, index) => `${item}-${index}`}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity style={styles.recentSearchItem} onPress={() => handleSearchSelect(item)}>
-                            <Text style={styles.recentSearchText}>{item}</Text>
-                        </TouchableOpacity>
-                    )}
-                />
-            )}
+            {filteredSearches.map((item, index) => {
+                let displayText: string;
+
+                if ('name' in item) {
+                    displayText = item.name; 
+                } else if ('username' in item) {
+                    displayText = item.username;
+                } else if ('title' in item) {
+                    displayText = item.title;
+                } else {
+                    displayText = 'Unknown Item';
+                }
+
+                return (
+                    <TouchableOpacity key={index} onPress={() => handleSearchSelect(item)}>
+                        <Text style={styles.suggestionText}>{displayText}</Text>
+                    </TouchableOpacity>
+                );
+            })}
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     suggestionsContainer: {
-        flex: 1,
+        padding: 10,
     },
-    sectionTitle: {
-        fontSize: 20,
-        fontFamily: 'DMSerifText',
-        marginTop: 8,
-    },
-    recentSearchItem: {
-        paddingVertical: 8,
-        borderBottomWidth: 1,
-        borderBottomColor: '#EEEEEE',
-    },
-    recentSearchText: {
+    suggestionText: {
         fontSize: 16,
+        marginVertical: 5,
     },
 });

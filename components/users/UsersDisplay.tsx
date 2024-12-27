@@ -3,11 +3,12 @@ import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet } from 'react
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Shadow } from 'react-native-shadow-2';
 
-type User = {
+export type User = {
     id: number;
     image: string;
     username: string;
     following?: boolean;
+    type: 'user';
 };
 
 type UsersProps = {

@@ -3,13 +3,14 @@ import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Shadow } from 'react-native-shadow-2';
 
-type Actor = {
+export type Actor = {
     id: number;
     name: string;
     dateOfBirth: string;
     country: string;
     series: string[];
     image: string;
+    type: 'actor'
 };
 
 type ActorsProps = {

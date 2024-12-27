@@ -1,164 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, View, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, View, TouchableOpacity, Text, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import SearchBar from '@/components/search/SearchBar';
-import SearchSuggestions from '@/components/search/SearchSuggestions';
 import GenresDisplay from '@/components/shows/GenreDisplay';
 import FilterTabs from '@/components/FilterTabs';
-
 import ActorsDisplay from '@/components/actors/ActorsDisplay';
 import UsersDisplay from '@/components/users/UsersDisplay';
 import ShowsDisplay from '@/components/shows/ShowsDisplay';
 
+import type { Actor } from '@/components/actors/ActorsDisplay';
+import type { User } from '@/components/users/UsersDisplay';
+import type { Show } from '@/components/shows/ShowsDisplay';
+
+type SearchResult = Actor | User | Show;
+
+type Genre = {
+    name: string;
+    onPress: () => void;
+};
+
+type Filter = {
+    label: string;
+    key: string | null;
+};
+
 export default function SearchScreen() {
     const router = useRouter();
     const [isFocused, setIsFocused] = useState(false);
-    const [recentSearches, setRecentSearches] = useState<string[]>(['Actor A', 'User B', 'Series C', 'User X']);
-    const [filteredSearches, setFilteredSearches] = useState<string[]>(recentSearches);
-    const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
     const [searchText, setSearchText] = useState('');
+    const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
-    const genres = [
-        { name: 'Comedy', onPress: () => router.push(`/genres/${'Comedy'}`) },
-        { name: 'Drama', onPress: () => router.push(`/genres/${'Drama'}`) },
-        { name: 'Science-Fiction', onPress: () => router.push(`/genres/${'Science-Fiction'}`) },
-        { name: 'Thriller', onPress: () => router.push(`/genres/${'Thriller'}`) },
-        { name: 'Action', onPress: () => router.push(`/genres/${'Action'}`) },
-        { name: 'Crime', onPress: () => router.push(`/genres/${'Crime'}`) },
-        { name: 'Horror', onPress: () => router.push(`/genres/${'Horror'}`) },
-        { name: 'Romance', onPress: () => router.push(`/genres/${'Romance'}`) },
-        { name: 'Adventure', onPress: () => router.push(`/genres/${'Adventure'}`) },
-        { name: 'Music', onPress: () => router.push(`/genres/${'Music'}`) },
-        { name: 'Mystery', onPress: () => router.push(`/genres/${'Mystery'}`) },
-        { name: 'Supernatural', onPress: () => router.push(`/genres/${'Supernatural'}`) },
+    const actors: Actor[] = [
+        { id: 1, name: 'Ben Lawson', dateOfBirth: '1980-02-06', country: 'Australia', series: ['Firefly Lane', 'Neighbours', 'Designated Survivor', 'The Deep End'], image: 'https://static.tvmaze.com/uploads/images/medium_portrait/8/20174.jpg', type: 'actor' },
+        { id: 2, name: 'Actor Two', dateOfBirth: '1985-01-01', country: 'Canada', series: ['Show 3', 'Show 4'], image: 'https://via.placeholder.com/80x120', type: 'actor' },
     ];
 
-    const filters = [
+    const users: User[] = [
+        { id: 1, image: 'https://via.placeholder.com/80x80', username: 'User1', following: true, type: 'user' },
+        { id: 2, image: 'https://via.placeholder.com/80x80', username: 'User2', following: false, type: 'user' },
+        { id: 3, image: 'https://via.placeholder.com/80x80', username: 'User3', following: false, type: 'user' },
+    ];
+
+    const shows: Show[] = [
+        { id: 1, image: 'https://static.tvmaze.com/uploads/images/medium_portrait/211/528026.jpg', title: 'Mr. Robot', year: 2015, seasons: 4, creator: 'Sam Esmail', rating: 4.5, type: 'series' },
+        { id: 2, image: 'https://via.placeholder.com/80x120', title: 'Show Two', year: 2024, seasons: 2, creator: 'Creator 2', rating: 3.2, date: '2024-06-01', type: 'series' },
+    ];
+
+    const genres: Genre[] = [
+        'Comedy', 'Drama', 'Science-Fiction', 'Thriller', 'Action', 'Crime',
+        'Horror', 'Romance', 'Adventure', 'Music', 'Mystery', 'Supernatural',
+    ].map((genre) => ({
+        name: genre,
+        onPress: () => router.push(`/genres/${genre}`),
+    }));
+
+    const filters: Filter[] = [
         { label: 'All', key: null },
         { label: 'Actors', key: 'actor' },
         { label: 'Series', key: 'series' },
         { label: 'Users', key: 'user' },
     ];
 
-    const handleSearchFocus = () => {
-        setIsFocused(true);
-    };
+    const searchResults: SearchResult[] = [...actors, ...users, ...shows];
 
-    const handleSearchBlur = () => {
-        setIsFocused(false);
-    };
+    const handleSearchFocus = () => setIsFocused(true);
+    const handleSearchBlur = () => setIsFocused(false);
+    const handleSearchChange = (text: string) => setSearchText(text);
+    const handleFilterChange = (filter: string | null) => setSelectedFilter(filter);
 
-    const handleSearchChange = (text: string) => {
-        setSearchText(text);
-    };
-
-    const handleFilterChange = (filter: string | null) => {
-        setSelectedFilter(filter);
-    };
-
-    useEffect(() => {
-        const filtered = recentSearches.filter((search) => {
-            const searchTextMatch = search.toLowerCase().includes(searchText.toLowerCase());
-            if (selectedFilter) {
-                return searchTextMatch && search.toLowerCase().includes(selectedFilter.toLowerCase());
-            }
-            return searchTextMatch;
-        });
-        setFilteredSearches(filtered);
-    }, [searchText, selectedFilter]);
-
-    const handleSearchSelect = (search: string) => {
-        console.log(search);
-    };
-
-    // Dummy Data for actors, users, and shows
-    const actors = [
-        {
-            id: 1,
-            name: 'Actor One',
-            dateOfBirth: '1980-01-01',
-            country: 'USA',
-            series: ['Show 1', 'Show 2'],
-            image: 'https://via.placeholder.com/80x120',
-        },
-        {
-            id: 2,
-            name: 'Actor Two',
-            dateOfBirth: '1985-01-01',
-            country: 'Canada',
-            series: ['Show 3', 'Show 4'],
-            image: 'https://via.placeholder.com/80x120',
-        },
-    ];
-
-    const users = [
-        { id: 1, image: 'https://via.placeholder.com/80x80', username: 'User1', following: true },
-        { id: 2, image: 'https://via.placeholder.com/80x80', username: 'User2', following: false },
-        { id: 3, image: 'https://via.placeholder.com/80x80', username: 'User3', following: false },
-    ];
-
-    const shows = [
-        {
-            id: 1,
-            image: 'https://via.placeholder.com/80x120',
-            title: 'Show One',
-            year: 2022,
-            seasons: 3,
-            creator: 'Creator 1',
-            rating: 8.5,
-            progress: 50,
-            date: '2024-01-01',
-        },
-        {
-            id: 2,
-            image: 'https://via.placeholder.com/80x120',
-            title: 'Show Two',
-            year: 2024,
-            seasons: 2,
-            creator: 'Creator 2',
-            rating: 7.2,
-            date: '2024-06-01',
-        },
-    ];
+    const filteredSearches = searchResults.filter((item) => {
+        const matchesSearchText =
+            ('name' in item && item.name.toLowerCase().includes(searchText.toLowerCase())) ||
+            ('username' in item && item.username.toLowerCase().includes(searchText.toLowerCase())) ||
+            ('title' in item && item.title.toLowerCase().includes(searchText.toLowerCase()));
+        return selectedFilter ? matchesSearchText && item.type === selectedFilter : matchesSearchText;
+    });
 
     return (
         <SafeAreaView style={styles.container}>
-            <SearchBar 
-                onFocus={handleSearchFocus} 
-                onBlur={handleSearchBlur} 
-                onChange={handleSearchChange} 
-            />
+            <SearchBar onFocus={handleSearchFocus} onBlur={handleSearchBlur} onChange={handleSearchChange}/>
 
-            {isFocused && (searchText || recentSearches.length > 0) ? (
+            {isFocused && (searchText || filteredSearches.length > 0) ? (
                 <View style={styles.suggestionsContainer}>
-                    <FilterTabs tabs={filters} onTabChange={handleFilterChange} allowNoneSelected={true} initialTab={null} />
-                    <SearchSuggestions filteredSearches={filteredSearches} handleSearchSelect={handleSearchSelect} />
-                    {selectedFilter === 'actor' || selectedFilter === null ? (
-                        <ActorsDisplay actors={actors} />
-                    ) : selectedFilter === 'user' ? (
-                        <UsersDisplay users={users} currentUser={users[0]} type="search" />
-                    ) : selectedFilter === 'series' ? (
-                        <ShowsDisplay shows={shows} type="default" />
-                    ) : null}
+                    <FilterTabs tabs={filters} onTabChange={handleFilterChange} allowNoneSelected={true} initialTab={null}/>
+                    <FlatList
+                        data={filteredSearches}
+                        keyExtractor={(item) => `${item.type}-${item.id}`}
+                        keyboardShouldPersistTaps="handled"
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.resultContainer}
+                                onPress={() => {
+                                    console.log(`Clicked item: ${item.type} - ID: ${item.id}`);
+                                    switch (item.type) {
+                                        case 'actor':
+                                            console.log(`/actors/${item.id}`);
+                                            router.push(`/actors/${item.id}`);
+                                            break;
+                                        case 'user':
+                                            console.log(`/user/${item.id}`);
+                                            break;
+                                        case 'series':
+                                            console.log(`/series/${item.id}`);
+                                            break;
+                                    }
+                                }}
+                            >
+                                {item.type === 'actor' && (
+                                    <TouchableWithoutFeedback>
+                                        <ActorsDisplay actors={[item]} />
+                                    </TouchableWithoutFeedback>
+                                )}
+                                {item.type === 'user' && (
+                                    <TouchableWithoutFeedback>
+                                        <UsersDisplay users={[item]} currentUser={users[0]} type="search" />
+                                    </TouchableWithoutFeedback>
+                                )}
+                                {item.type === 'series' && (
+                                    <TouchableWithoutFeedback>
+                                        <ShowsDisplay shows={[item]} type="default" />
+                                    </TouchableWithoutFeedback>
+                                )}
+                            </TouchableOpacity>
+                        )}
+                    />
                 </View>
             ) : (
                 <GenresDisplay genres={genres} />
             )}
         </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF4E0',
         paddingHorizontal: 16,
-        paddingTop: 110,
-        justifyContent: 'flex-start',
+        paddingTop: 100,
     },
     suggestionsContainer: {
         flex: 1,
         backgroundColor: '#FFF4E0',
+    },
+    resultContainer: {
+        marginTop: 4,
     },
 });

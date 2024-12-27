@@ -5,7 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Shadow } from 'react-native-shadow-2';
 import * as Progress from 'react-native-progress';
 
-type Show = {
+export type Show = {
     id: number,
     image: string;
     title: string;
@@ -15,6 +15,7 @@ type Show = {
     rating?: number;
     date?: string;
     progress?: number;
+    type: 'series';
 };
 
 type ShowType = 'default' | 'progress' | 'unreleased' | 'add';
