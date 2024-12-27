@@ -8,6 +8,7 @@ import FilterTabs from '@/components/FilterTabs';
 import ActorsDisplay from '@/components/actors/ActorsDisplay';
 import UsersDisplay from '@/components/users/UsersDisplay';
 import ShowsDisplay from '@/components/shows/ShowsDisplay';
+import EmptyState from '@/components/EmptyState';
 
 import type { Actor } from '@/components/actors/ActorsDisplay';
 import type { User } from '@/components/users/UsersDisplay';
@@ -81,9 +82,20 @@ export default function SearchScreen() {
         <SafeAreaView style={styles.container}>
             <SearchBar onFocus={handleSearchFocus} onBlur={handleSearchBlur} onChange={handleSearchChange}/>
 
-            {isFocused && (searchText || filteredSearches.length > 0) ? (
+            {isFocused ? (
+                filteredSearches.length === 0 ? (
+                    searchText ? (
+                        <EmptyState type="404" />
+                    ) : (
+                        <EmptyState type="recentSearches" />
+                    )
+                ) : (
                 <View style={styles.suggestionsContainer}>
                     <FilterTabs tabs={filters} onTabChange={handleFilterChange} allowNoneSelected={true} initialTab={null}/>
+
+                    {filteredSearches.length === 0 ? (
+                        <EmptyState type="404" />
+                    ) : (
                     <FlatList
                         data={filteredSearches}
                         keyExtractor={(item) => `${item.type}-${item.id}`}
@@ -124,8 +136,8 @@ export default function SearchScreen() {
                                 )}
                             </TouchableOpacity>
                         )}
-                    />
-                </View>
+                    />)}
+                </View>)
             ) : (
                 <GenresDisplay genres={genres} />
             )}
