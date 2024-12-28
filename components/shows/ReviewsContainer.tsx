@@ -23,9 +23,9 @@ export default function ReviewsContainer({ reviews, type, seriesId, seasonNumber
 
     const handleSeeAll = (section: string) => {
         if (type === 'episode') {
-            console.log(`/series/${seriesId}/seasons/${seasonNumber}/episodes/${episodeNumber}/reviews`);
+            router.push(`/series/${seriesId}/seasons/${seasonNumber}/${episodeNumber}/reviews`);
         } else {
-            console.log(`/series/${seriesId}/reviews`);
+            router.push(`/series/${seriesId}/reviews`);
         }
     };
 

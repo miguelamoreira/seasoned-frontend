@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Touchable } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Star from 'react-native-vector-icons/AntDesign';
@@ -22,10 +22,15 @@ type Review = {
 type ReviewsProps = {
     reviews: Review[];
     type: 'own' | 'notOwn' | 'all' | 'comment';
+    page?: 'series' | 'episode';
+    seriesId?: string;
+    seasonNumber?: string;
+    episodeNumber?: string;
 };
 
-export default function ReviewsDisplay({ reviews, type }: ReviewsProps) {
+export default function ReviewsDisplay({ reviews, type, page, seriesId, seasonNumber, episodeNumber }: ReviewsProps) {
     const [popularReviews, setPopularReviews] = useState(reviews);
+    const router = useRouter();
 
     const toggleLike = (index: number) => {
         if (type !== 'own') {
@@ -36,6 +41,14 @@ export default function ReviewsDisplay({ reviews, type }: ReviewsProps) {
             setPopularReviews(updatedReviews);
         }
     };
+
+    const goToReviewDetails = (reviewId: number) => {
+        if (page === 'episode') {
+            router.push(`/series/${seriesId}/seasons/${seasonNumber}/${episodeNumber}/reviews/${reviewId}`);
+        } else {
+            router.push(`/series/${seriesId}/reviews/${reviewId}`);
+        }
+      };    
 
     return (
         <View style={styles.popularContainer}>
@@ -138,7 +151,7 @@ export default function ReviewsDisplay({ reviews, type }: ReviewsProps) {
             { type === 'all' && (
                 popularReviews.map((review, index) => (
                     <Shadow key={index} distance={2} startColor={'#211B17'} offset={[2, 4]} style={popularReviews.length > 1 && { marginBottom: 20 }}>
-                        <View style={[ styles.reviewCard, popularReviews.length > 1 && { marginBottom: 2 }]}>
+                        <TouchableOpacity style={[ styles.reviewCard, popularReviews.length > 1 && { marginBottom: 2 }]} activeOpacity={0.9} onPress={() => goToReviewDetails(review.id)}>
                             <View style={styles.topRow}>
                                 <View style={{ paddingHorizontal: 8 }}>
                                     <View style={styles.stars}>
@@ -172,7 +185,7 @@ export default function ReviewsDisplay({ reviews, type }: ReviewsProps) {
                                     </View>
                                 </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </Shadow>
                 ))
             )}

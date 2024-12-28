@@ -7,7 +7,7 @@ import { Shadow } from 'react-native-shadow-2';
 type LogButtonProps = {
     onModalToggle: (isOpen: boolean) => void;
     navigation: any;
-    type: 'episode' | 'series';  // Type of item: 'episode' or 'series'
+    type: 'episode' | 'series';
 };
 
 export default function LogButton({ onModalToggle, navigation, type }: LogButtonProps) {
@@ -135,10 +135,7 @@ export default function LogButton({ onModalToggle, navigation, type }: LogButton
                                 <Text style={styles.starsTitle}>Rating</Text>
                                 <View style={styles.starsContainer}>
                                     {Array.from({ length: 5 }, (_, index) => (
-                                        <TouchableOpacity
-                                            key={index}
-                                            onPress={() => handleRatingPress(index)}
-                                        >
+                                        <TouchableOpacity key={index} onPress={() => handleRatingPress(index)}>
                                             <AntDesign
                                                 name="star"
                                                 size={28}

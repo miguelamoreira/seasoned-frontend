@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     crossCheckContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: 80,
+        width: '100%',
     },
     button: {
         padding: 4,

@@ -46,7 +46,7 @@ export default function EpisodeScreen() {
     const renderItem = ({ item }: { item: string }) => {
         switch (item) {
             case 'optionsTab':
-                return <OptionsTab type='back' onBackPress={() => router.push(`/series/${seriesId}/seasons/${seasonNumber}`)}></OptionsTab>
+                return <OptionsTab type='back' onBackPress={() => router.back()}></OptionsTab>
             case 'heading': 
                 return <Text style={styles.heading}>Episode {episodeNumber} ({episode.series})</Text>
             case 'header':

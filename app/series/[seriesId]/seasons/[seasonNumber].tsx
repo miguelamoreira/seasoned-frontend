@@ -24,7 +24,7 @@ export default function SeasonScreen() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <OptionsTab type="back" onBackPress={() => router.push(`/series/${seriesId}`)}/>
+            <OptionsTab type="back" onBackPress={() => router.back()}/>
             <Text style={styles.heading}>{seasonTitle}</Text>
             <Progress.Bar
                 progress={seasonProgress}

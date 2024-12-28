@@ -39,7 +39,7 @@ export default function RootLayout() {
     ? navigationState?.routes[navigationState.index]?.name
     : 'Home';
 
-  const hideTabBarScreens = ['index', 'signin', 'register'];
+  const hideTabBarScreens = ['index', 'signin', 'register', 'sitemap'];
 
   const handleNavigation = (page: string) => {
     setCurrentPage(page);

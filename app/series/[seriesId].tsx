@@ -79,7 +79,7 @@ export default function SeriesScreen() {
     return (
         <SafeAreaView style={styles.mainContainer}>
             <View style={[styles.optionsTabContainer]}>
-                <OptionsTab type="back" onBackPress={() => router.push('/search')} />
+                <OptionsTab type="back" onBackPress={() => router.back()} />
             </View>
             <FlatList
                 data={['header', 'details', 'bio', 'alert', 'logButton' , 'cast', 'seasons', 'reviews']}
