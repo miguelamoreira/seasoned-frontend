@@ -41,6 +41,8 @@ export default function RootLayout() {
 
   const hideTabBarScreens = ['index', 'signin', 'register', 'sitemap'];
 
+  const userId = 1;
+
   const handleNavigation = (page: string) => {
     setCurrentPage(page);
     if (page === 'Home') {
@@ -50,7 +52,7 @@ export default function RootLayout() {
     } else if (page === 'Notifications') {
       router.push('/testPage');
     } else if (page === 'Profile') {
-      router.push('/homepage');
+      router.push(`/users/${userId}`);
     } else {
       console.error(`Route for page "${page}" not found.`);
     }
@@ -72,7 +74,7 @@ export default function RootLayout() {
         </Stack>
 
         {!hideTabBarScreens.includes(currentRoute || '') && (
-          <TabBar isLoggedIn={true} currentPage={currentPage} onNavigate={handleNavigation}/>
+          <TabBar isLoggedIn={true} currentPage={currentPage} onNavigate={handleNavigation} userId={userId}/>
         )}
       </View>
       <StatusBar style="auto" />

@@ -12,11 +12,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 type TabBarProps = {
     isLoggedIn: boolean;
     currentPage: string;
-    onNavigate: (page: string) => void;
+    onNavigate: (page: string, userId?: number) => void;
+    userId?: number;
 };
 
 export default function TabBar(props: TabBarProps) {
-    const { isLoggedIn, currentPage, onNavigate } = props;
+    const { isLoggedIn, currentPage, onNavigate, userId } = props;
     const [keyboardVisible, setKeyboardVisible] = useState(false);
 
     useEffect(() => {
@@ -55,8 +56,22 @@ export default function TabBar(props: TabBarProps) {
         >
             <View style={styles.tabContainer}>
                 {tabs.map((tab) => (
-                    <TouchableOpacity key={tab.name} style={styles.tab} onPress={() => onNavigate(tab.name)}>
-                        <Ionicons name={tab.icon} size={28} color={currentPage === tab.name ? '#82AA59' : '#6A4A36'}/>
+                    <TouchableOpacity
+                        key={tab.name}
+                        style={styles.tab}
+                        onPress={() => {
+                            if (tab.name === 'Profile' && userId) {
+                                onNavigate(tab.name, userId); 
+                            } else {
+                                onNavigate(tab.name);
+                            }
+                        }}
+                    >
+                        <Ionicons
+                            name={tab.icon}
+                            size={28}
+                            color={currentPage === tab.name ? '#82AA59' : '#6A4A36'}
+                        />
                     </TouchableOpacity>
                 ))}
             </View>

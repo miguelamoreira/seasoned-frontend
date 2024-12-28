@@ -39,7 +39,7 @@ export default function ReviewsContainer({ reviews, type, seriesId, seasonNumber
                 </TouchableOpacity>
             </View>
             <View style={styles.ratingsWrapper}>
-                <RatingsDisplay ratings={ratingsHistogram} average={parseFloat(averageRating)} />
+                <RatingsDisplay ratings={ratingsHistogram} average={parseFloat(averageRating)} type="review" />
             </View>
             <ReviewsDisplay reviews={reviews} type="all" />
         </View>
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 10,
     },
     seeAllContainer: {
         flexDirection: 'row',

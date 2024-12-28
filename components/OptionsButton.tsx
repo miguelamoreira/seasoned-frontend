@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { Shadow } from 'react-native-shadow-2';
 
 interface OptionsButtonProps {
-    option: 'addComment' | 'reviews' | 'watched' | 'watchlist' | 'dropped' | 'likes';
+    option: 'addComment' | 'reviews' | 'watched' | 'watchlist' | 'dropped' | 'likes' | 'following';
     navigateTo?: string;
 }
 
@@ -55,6 +55,13 @@ export default function OptionsButton({ option, navigateTo }: OptionsButtonProps
                         <Text style={styles.buttonText}>Dropped</Text>
                     </>
                 );
+            case 'following':
+                return (
+                    <>
+                        <FontAwesome name="bookmark" size={20} color="#FFF4E0" />
+                        <Text style={styles.buttonText}>Following</Text>
+                    </>
+                );
             case 'likes':
                 return (
                     <>
@@ -74,7 +81,7 @@ export default function OptionsButton({ option, navigateTo }: OptionsButtonProps
                     <View style={styles.actionText}>
                         {renderIconAndText()}
                     </View>
-                    <AntDesign name="down" size={24} color="#FFF4E0" />
+                    <AntDesign name="right" size={24} color="#FFF4E0" />
                 </TouchableOpacity>
             </Shadow>
         </View>
@@ -86,7 +93,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#5E4228',
+        backgroundColor: '#604D42',
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 20,

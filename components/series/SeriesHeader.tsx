@@ -8,9 +8,12 @@ export default function SeriesHeader({ image }: { image: string }) {
             source={require('../../assets/images/pattern.png')} 
             style={styles.headerContainer}
         >
-            <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
-                <Image source={{ uri: image }} style={styles.seriesImage} />
-            </Shadow>
+            <View style={styles.imageContainer}>
+                <Image source={require('../../assets/images/star.png')} style={styles.star}></Image>
+                <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
+                    <Image source={{ uri: image }} style={styles.seriesImage} />
+                </Shadow>
+            </View>
             <View style={styles.ellipse}>
                 <Image source={require('../../assets/images/ellipse.png')} />
             </View>
@@ -27,9 +30,18 @@ const styles = StyleSheet.create({
         marginLeft: -16,
         marginRight: -16,
     },
+    imageContainer: {
+        zIndex: 1,
+    },
     ellipse: { 
         position: 'absolute', 
         bottom: -4 
+    },
+    star: {
+        position: 'absolute',
+        zIndex: 1,
+        right: -16,
+        top: -4,
     },
     seriesImage: { 
         width: 150, 
