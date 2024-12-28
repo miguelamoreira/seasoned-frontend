@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Alert } from 'react-native';
 import { AntDesign, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Shadow } from 'react-native-shadow-2';
 
 type LogButtonProps = {
@@ -18,6 +18,7 @@ export default function LogButton({ onModalToggle, navigation, type }: LogButton
     const [isWatched, setIsWatched] = useState(false);
     const [isInWatchlist, setIsInWatchlist] = useState(false);
     const router = useRouter();
+    const { seriesId, seasonNumber, episodeNumber } = useLocalSearchParams<{ seriesId: string; seasonNumber: string; episodeNumber: string }>();
 
     const handleRatingPress = (index: number) => {
         setRating(index + 1);
@@ -51,7 +52,11 @@ export default function LogButton({ onModalToggle, navigation, type }: LogButton
 
     const goToLogReview = () => {
         closeModal();
-        router.push('/testPage');
+        if (type === 'series') {
+            router.push(`/series/${seriesId}/log`);
+        } else if (type === 'episode') {
+            router.push(`/series/${seriesId}/seasons/${seasonNumber}/${episodeNumber}/log`);
+        }
     };
 
     const renderEpisodeOptions = () => {
@@ -149,7 +154,7 @@ export default function LogButton({ onModalToggle, navigation, type }: LogButton
 
                             <TouchableOpacity onPress={toggleHeart} style={styles.heartContainer}>
                                 <AntDesign
-                                    name={liked ? 'heart' : 'hearto'}
+                                    name={liked ? 'heart' : 'heart'}
                                     size={48}
                                     color={liked ? '#EE6363' : '#EE636370'}
                                 />
