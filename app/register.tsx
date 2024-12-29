@@ -3,6 +3,8 @@ import { Image, StyleSheet, SafeAreaView, View, Text, TouchableOpacity, TextInpu
 import { Shadow } from 'react-native-shadow-2';
 import { useRouter } from 'expo-router';
 
+import OptionsTab from '@/components/OptionsTab';
+
 export default function RegisterScreen() {
     const [currentStep, setCurrentStep] = useState<number>(1);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
@@ -104,11 +106,7 @@ export default function RegisterScreen() {
 
     return (
         <SafeAreaView style={styles.mainContainer}>
-            <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
-                <TouchableOpacity style={styles.backButton} activeOpacity={0.9} onPress={handleBackButton}>
-                    <Image source={require('../assets/icons/back.png')} style={styles.buttonIcon} />
-                </TouchableOpacity>
-            </Shadow>
+            <OptionsTab type='back' onBackPress={() => router.back()}></OptionsTab>
 
             <View style={styles.headingContainer}>
                 <Text style={styles.heading}>{currentStep === 1 ? 'Sign up' : 'Select Genres'}</Text>
@@ -126,16 +124,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 42,
         color: '#211B17'
-    },
-    backButton: {
-        backgroundColor: '#6A4A36',
-        width: 45,
-        height: 45,
-        borderRadius: 30,
-        justifyContent: 'center',
-    },
-    buttonIcon: {
-        alignSelf: 'center',
     },
     headingContainer: {
         marginTop: 20,
