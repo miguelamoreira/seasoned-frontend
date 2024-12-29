@@ -49,14 +49,21 @@ export default function EpisodesDisplay({ episodes, type, seriesId, seasonNumber
                 <Image source={{ uri: item.image }} style={styles.episodeImage} />
             </Shadow>
             {type === 'default' ? (
-                <View style={styles.episodeDetails}>
-                    <Text style={styles.episodeTitle}>
-                        {item.title} <Text style={styles.episodeYear}>({item.year})</Text>
-                    </Text>
-                    <Text style={styles.episodeSeason}>
-                        Season {item.season} Episode {item.episode}
-                    </Text>
+                <View>
+                    <View style={styles.episodeDetails}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.episodeTitle} numberOfLines={1}>{item.title}</Text>
+                            <Text style={styles.episodeYear}>({item.year})</Text>
+                        </View>
+                        <Text style={styles.episodeSeason}>
+                            Season {item.season} Episode {item.episode}
+                        </Text>
+                    </View>
+                    <View style={styles.episodeDate}>
+                        <Text>{item.date}</Text>
+                    </View>
                 </View>
+                
             ) : (
                 <View style={styles.middleRow}>
                     <View style={styles.episodeDetails}>
@@ -115,10 +122,15 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 16,
     },
+    episodeDate: {
+        marginLeft: 16,
+    },
     episodeTitle: {
         fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 4,
+        textOverflow: 'ellipsis',
+        width: 150,
     },
     episodeYear: {
         fontSize: 14,

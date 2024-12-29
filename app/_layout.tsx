@@ -50,7 +50,7 @@ export default function RootLayout() {
     } else if (page === 'Search') {
       router.push('/search');
     } else if (page === 'Notifications') {
-      router.push('/homepage');
+      router.push('/notifications');
     } else if (page === 'Profile') {
       router.push(`/users/${userId}`);
     } else {
@@ -70,6 +70,7 @@ export default function RootLayout() {
           <Stack.Screen name="popularReviews"/>
           <Stack.Screen name="popularShows"/>
           <Stack.Screen name="search"/>
+          <Stack.Screen name="notifications"/>
         </Stack>
 
         {!hideTabBarScreens.includes(currentRoute || '') && (

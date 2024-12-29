@@ -15,7 +15,7 @@ export type Show = {
     rating?: number;
     date?: string;
     progress?: number;
-    type: 'series';
+    type?: 'series';
 };
 
 type ShowType = 'default' | 'progress' | 'unreleased' | 'add';

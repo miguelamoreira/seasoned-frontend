@@ -7,21 +7,21 @@ import { useRouter } from 'expo-router';
 
 type Review = {
     id: number;
-    image: string;
-    title: string;
-    year: number;
-    review: string;
-    likes: number;
-    comments: number;
-    username: string;
-    avatarUri: string;
-    liked: boolean;
-    rating: number;
+    image?: string;
+    title?: string;
+    year?: number;
+    review?: string;
+    likes?: number;
+    comments?: number;
+    username?: string;
+    avatarUri?: string;
+    liked?: boolean;
+    rating?: number;
 };
 
 type ReviewsProps = {
     reviews: Review[];
-    type: 'own' | 'notOwn' | 'all' | 'comment';
+    type: 'own' | 'notOwn' | 'all' | 'comment' | 'notifications';
     page?: 'series' | 'episode';
     seriesId?: string;
     seasonNumber?: string;
@@ -36,7 +36,7 @@ export default function ReviewsDisplay({ reviews, type, page, seriesId, seasonNu
         if (type !== 'own') {
             const updatedReviews = [...popularReviews];
             const targetReview = updatedReviews[index];
-            targetReview.likes += targetReview.liked ? -1 : 1;
+            targetReview.likes = (targetReview.likes || 0) + (targetReview.liked ? -1 : 1);
             targetReview.liked = !targetReview.liked;
             setPopularReviews(updatedReviews);
         }
@@ -68,8 +68,8 @@ export default function ReviewsDisplay({ reviews, type, page, seriesId, seasonNu
                                         <Text style={styles.reviewSeriesYear}>{review.year}</Text>
                                     </View>
                                     <View style={styles.stars}>
-                                        {Array.from({ length: 5 }, (_, index) => (
-                                            <Star key={index} name={index < review.rating ? 'star' : 'staro'} size={18} color="#D8A84E"/>
+                                        {Array.from({ length: 5 }, (_, idx) => (
+                                            <Star key={idx} name={idx < (review.rating || 0) ? 'star' : 'staro'} size={18} color="#D8A84E" />
                                         ))}
                                     </View>
                                     <Text style={styles.reviewText}>{review.review}</Text>
@@ -114,8 +114,8 @@ export default function ReviewsDisplay({ reviews, type, page, seriesId, seasonNu
                                         <Text style={styles.reviewSeriesYear}>{review.year}</Text>
                                     </View>
                                     <View style={styles.stars}>
-                                        {Array.from({ length: 5 }, (_, index) => (
-                                            <Star key={index} name={index < review.rating ? 'star' : 'staro'} size={18} color="#D8A84E"/>
+                                        {Array.from({ length: 5 }, (_, idx) => (
+                                            <Star key={idx} name={idx < (review.rating || 0) ? 'star' : 'staro'} size={18} color="#D8A84E" />
                                         ))}
                                     </View>
                                     <Text style={styles.reviewText}>{review.review}</Text>
@@ -155,8 +155,8 @@ export default function ReviewsDisplay({ reviews, type, page, seriesId, seasonNu
                             <View style={styles.topRow}>
                                 <View style={{ paddingHorizontal: 8 }}>
                                     <View style={styles.stars}>
-                                        {Array.from({ length: 5 }, (_, index) => (
-                                            <Star key={index} name={index < review.rating ? 'star' : 'staro'} size={18} color="#D8A84E"/>
+                                        {Array.from({ length: 5 }, (_, idx) => (
+                                            <Star key={idx} name={idx < (review.rating || 0) ? 'star' : 'staro'} size={18} color="#D8A84E" />
                                         ))}
                                     </View>
                                     <Text style={styles.reviewText}>{review.review}</Text>
@@ -202,6 +202,33 @@ export default function ReviewsDisplay({ reviews, type, page, seriesId, seasonNu
                                 <View style={styles.userRow}>
                                     <Image source={{ uri: review.avatarUri }} style={styles.avatar} />
                                     <Text style={styles.username}>{review.username}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </Shadow>
+                ))
+            )}
+            { type === 'notifications' && (
+                popularReviews.map((review, index) => (
+                    <Shadow key={index} distance={2} startColor={'#211B17'} offset={[2, 4]} style={popularReviews.length > 1 && { marginBottom: 20 }}>
+                        <View style={[ styles.reviewCard, popularReviews.length > 1 && { marginBottom: 2 }]}>
+                            <View style={styles.topRow}>
+                                <View style={styles.leftSection}>
+                                    <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
+                                        <Image source={{ uri: review.image }} style={styles.reviewImage}/>
+                                    </Shadow>
+                                </View>
+                                <View style={styles.rightSection}>
+                                    <View style={styles.reviewSeries}>
+                                        <Text style={styles.reviewSeriesTitle}>{review.title}</Text>
+                                        <Text style={styles.reviewSeriesYear}>{review.year}</Text>
+                                    </View>
+                                    <View style={styles.stars}>
+                                        {Array.from({ length: 5 }, (_, idx) => (
+                                            <Star key={idx} name={idx < (review.rating || 0) ? 'star' : 'staro'} size={18} color="#D8A84E" />
+                                        ))}
+                                    </View>
+                                    <Text style={styles.reviewText}>{review.review}</Text>
                                 </View>
                             </View>
                         </View>

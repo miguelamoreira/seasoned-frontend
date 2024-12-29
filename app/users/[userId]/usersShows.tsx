@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Shadow } from 'react-native-shadow-2';
 
 import ShowsDisplay, { Show } from '@/components/shows/ShowsDisplay';
 import CoverDisplay from '@/components/shows/Cover';
 import OptionsTab from '@/components/OptionsTab';
 import EmptyState from '@/components/EmptyState';
 import Menu from '@/components/users/Menu';
+import FilterTabs from '@/components/FilterTabs';
 
 const TABS: { label: string; icon: string; library: "FontAwesome" | "AntDesign" }[] = [
     { label: 'Following', icon: 'bookmark', library: 'FontAwesome' },
@@ -24,7 +24,7 @@ const showsData: Record<string, Show[] | Record<WatchlistFilterType, Show[]>> = 
         {
             id: 1,
             title: 'You',
-            image: 'https://example.com/image-you.jpg',
+            image: 'https://static.tvmaze.com/uploads/images/medium_portrait/548/1371270.jpg',
             year: 2018,
             seasons: 4,
             progress: 50,
@@ -37,7 +37,7 @@ const showsData: Record<string, Show[] | Record<WatchlistFilterType, Show[]>> = 
         {
             id: 2,
             title: 'Normal People',
-            image: 'https://example.com/image-normalpeople.jpg',
+            image: 'https://static.tvmaze.com/uploads/images/medium_portrait/249/623354.jpg',
             year: 2020,
             seasons: 1,
             creator: 'Lenny Abrahamson',
@@ -47,7 +47,7 @@ const showsData: Record<string, Show[] | Record<WatchlistFilterType, Show[]>> = 
         {
             id: 3,
             title: 'Breaking Bad',
-            image: 'https://example.com/image-breakingbad.jpg',
+            image: 'https://static.tvmaze.com/uploads/images/medium_portrait/501/1253519.jpg',
             year: 2008,
             seasons: 5,
             creator: 'Vince Gilligan',
@@ -60,7 +60,7 @@ const showsData: Record<string, Show[] | Record<WatchlistFilterType, Show[]>> = 
             {
                 id: 7,
                 title: 'My Brilliant Friend',
-                image: 'https://example.com/image-mybrilliantfriend.jpg',
+                image: 'https://static.tvmaze.com/uploads/images/medium_portrait/540/1350132.jpg',
                 year: 2018,
                 seasons: 2,
                 creator: 'Saverio Costanzo',
@@ -70,8 +70,8 @@ const showsData: Record<string, Show[] | Record<WatchlistFilterType, Show[]>> = 
         Unreleased: [
             {
                 id: 10,
-                title: 'Yellow Jackets',
-                image: 'https://example.com/image-yellowjackets.jpg',
+                title: 'Yellowjackets',
+                image: 'https://static.tvmaze.com/uploads/images/medium_portrait/449/1124396.jpg',
                 year: 2025,
                 seasons: 1,
                 date: '14 February, 2025',
@@ -83,7 +83,7 @@ const showsData: Record<string, Show[] | Record<WatchlistFilterType, Show[]>> = 
         {
             id: 4,
             title: 'The Walking Dead',
-            image: 'https://example.com/image-walkingdead.jpg',
+            image: 'https://static.tvmaze.com/uploads/images/medium_portrait/424/1061900.jpg',
             year: 2010,
             seasons: 11,
             creator: 'Frank Darabont',
@@ -99,15 +99,13 @@ export default function UsersShowsScreen() {
     const router = useRouter();
 
     const [activeTab, setActiveTab] = useState<'Following' | 'Watched' | 'Watchlist' | 'Dropped'>(
-            (initialActiveTab as 'Following' | 'Watched' | 'Watchlist' | 'Dropped') || 'Following'
-        );
+        (initialActiveTab as 'Following' | 'Watched' | 'Watchlist' | 'Dropped') || 'Following'
+    );
     const [watchlistFilter, setWatchlistFilter] = useState<WatchlistFilterType>('Released');
 
     const handleTabPress = (tab: string) => {
-        console.log('Tab Pressed:', tab); 
         setActiveTab(tab as 'Following' | 'Watched' | 'Watchlist' | 'Dropped');
     };
-    const handleFilterPress = (filter: WatchlistFilterType) => setWatchlistFilter(filter);
 
     const renderShows = () => {
         if (activeTab === 'Watchlist') {
@@ -157,26 +155,16 @@ export default function UsersShowsScreen() {
         return <ShowsDisplay shows={shows} type={showType} />;
     };
 
-    const renderFilters = () => (
-        <View style={styles.filtersContainer}>
-            {WATCHLIST_FILTERS.map((filter) => (
-                watchlistFilter === filter ? (
-                    <Shadow key={filter} distance={1} startColor={'#211B17'} offset={[1, 2]}>
-                        <Text style={[styles.filterText, styles.activeFilterText]} onPress={() => handleFilterPress(filter)}>{filter}</Text>
-                    </Shadow>
-                ) : (
-                    <Text key={filter} style={styles.filterText}onPress={() => handleFilterPress(filter)}>{filter}</Text>
-                )
-            ))}
-        </View>
-    );    
-
     return (
         <SafeAreaView style={styles.container}>
             <OptionsTab type="back" onBackPress={() => router.back()} />
             <Menu tabs={TABS} activeTab={activeTab} onTabPress={handleTabPress} />
-            
-            {activeTab === 'Watchlist' && renderFilters()}
+
+            {activeTab === 'Watchlist' && ( <FilterTabs tabs={WATCHLIST_FILTERS.map((filter) => ({ label: filter, key: filter }))}
+                onTabChange={(key) => setWatchlistFilter(key as WatchlistFilterType)}
+                initialTab="Released"
+                />
+            )}
 
             <View style={styles.showsContainer}>
                 {renderShows()}
@@ -193,32 +181,7 @@ const styles = StyleSheet.create({
         paddingTop: 42,
         paddingBottom: 60,
     },
-    filtersContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        gap: 12,
-        marginVertical: 16,
-    },
-    filterText: {
-        fontSize: 14,
-        color: '#352A23',
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-        borderWidth: 2,
-        borderColor: '#D8A84E',
-        borderRadius: 16,
-    },
-    activeFilterText: {
-        fontWeight: 'bold',
-        color: '#352A23',
-        backgroundColor: '#D8A84E',
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-        borderWidth: 2,
-        borderColor: '#211B17',
-        borderRadius: 16,
-    },
     showsContainer: {
         marginTop: 16,
-    }
+    },
 });

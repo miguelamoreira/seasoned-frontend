@@ -129,7 +129,7 @@ export default function UserProfileScreen() {
       } else {
         return (
           <ProfileHeader username={user.username} followers={user.followers} following={user.following} profileImage={user.avatar} onEditProfile={handleEditProfile}
-            onSettingsPress={() => console.log('Settings Pressed')} onQRPress={() => router.push(`/users/${userId}/qrcode`)} type={type} onSaveProfile={handleSaveProfile}
+            onSettingsPress={() => router.push(`/users/${userId}/configurations`)} onQRPress={() => router.push(`/users/${userId}/qrcode`)} type={type} onSaveProfile={handleSaveProfile}
           />
         );
       }
