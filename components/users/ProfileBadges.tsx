@@ -21,9 +21,8 @@ export default function ProfileBadges({ badges, type }: BadgesDisplayProps) {
     const router = useRouter();
     const [visibility, setVisibility] = useState(true);
 
-    const handleSeeAll = (section: string) => {
-        console.log(`Navigated to all items in ${section}`);
-        console.log('/profile/badges');
+    const handleSeeAll = (userId: number) => {
+        router.push(`/users/${userId}/badges`)
     };
 
     return (
