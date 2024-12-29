@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, StyleSheet, Text } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Shadow } from 'react-native-shadow-2';
 
 import OptionsTab from '@/components/OptionsTab';
@@ -10,7 +10,7 @@ import ReviewsDisplay from '@/components/reviews/ReviewsDisplay';
 import EpisodesDisplay from '@/components/episodes/EpisodesDisplay';
 import CoverDisplay from '@/components/shows/Cover';
 
-const TABS = [
+const TABS: { label: string; icon: string; library: "FontAwesome" | "AntDesign" }[] = [
     { label: 'Reviews', icon: 'bookmark', library: 'FontAwesome' },
     { label: 'Likes', icon: 'heart', library: 'AntDesign' },
 ];
@@ -75,13 +75,19 @@ const seriesData = [
     { id: 3, title: 'Black Mirror', image: 'https://example.com/black-mirror.jpg' },
 ];
 
-export default function CustomScreen() {
+export default function UsersActivityScreen() {
+    const { userId, activeTab: initialActiveTab } = useLocalSearchParams<{ userId: string; activeTab: string }>();
     const router = useRouter();
 
-    const [activeTab, setActiveTab] = useState<string>('Reviews');
+    const [activeTab, setActiveTab] = useState<'Reviews' | 'Likes'>(
+        (initialActiveTab as 'Reviews' | 'Likes') || 'Reviews'
+    );
     const [activeSubTab, setActiveSubTab] = useState<string>('Episodes');
 
-    const handleTabPress = (label: string) => setActiveTab(label);
+    const handleTabPress = (tab: string) => {
+        console.log('Tab Pressed:', tab); 
+        setActiveTab(tab as 'Reviews' | 'Likes');
+    };
     const handleSubTabPress = (subTab: string) => setActiveSubTab(subTab);
 
     const renderLikes = () => {

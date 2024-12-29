@@ -15,10 +15,10 @@ type ProfileHeaderProps = {
     onEditProfile: () => void;
     onSaveProfile: (newUsername: string) => void;
     onSettingsPress: () => void;
-    onGridPress: () => void;
+    onQRPress: () => void;
 };
 
-export default function ProfileHeader({ type, username, followers, following, profileImage, onEditProfile, onSaveProfile, onSettingsPress, onGridPress }: ProfileHeaderProps) {
+export default function ProfileHeader({ type, username, followers, following, profileImage, onEditProfile, onSaveProfile, onSettingsPress, onQRPress }: ProfileHeaderProps) {
     const [editedUsername, setEditedUsername] = useState(username);
     const [isProfileModalVisible, setIsProfileModalVisible] = useState(false); 
     const router = useRouter();
@@ -37,14 +37,14 @@ export default function ProfileHeader({ type, username, followers, following, pr
 
     const handleFollowersPress = (userId: number) => {
       router.push({
-          pathname: `/users/${userId}/followers`,
+          pathname: `/users/${userId}/followers` as any,
           params: { activeTab: 'Followers' },
         });
     };
     
     const handleFollowingPress = (userId: number) => {
         router.push({
-            pathname: `/users/${userId}/followers`,
+            pathname: `/users/${userId}/followers` as any,
             params: { activeTab: 'Following' },
         });
     };
@@ -116,7 +116,7 @@ export default function ProfileHeader({ type, username, followers, following, pr
               <Shadow distance={1} startColor={'#211B17'} offset={[1, 2]}>
                 <TouchableOpacity
                   style={[styles.iconButton, { width: 40, height: 40 }]}
-                  onPress={onGridPress}
+                  onPress={onQRPress}
                 >
                   <Icon name="qrcode" size={20} color="#FFF4E0" />
                 </TouchableOpacity>

@@ -14,7 +14,7 @@ export default function ProfileOptions({ title, options, type }: ProfileOptionsP
       <Text style={styles.heading}>{title}</Text>
       <View style={styles.optionsContainer}>
         {options.map((option, index) => (
-          <OptionsButton key={index} option={option.label} onPress={option.action} />
+          <OptionsButton key={index} option={option.label} onPress={option.action}/>
         ))}
       </View>
     </View>
@@ -22,18 +22,18 @@ export default function ProfileOptions({ title, options, type }: ProfileOptionsP
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginVertical: 12,
-    },
-    heading: {
-        fontSize: 20,
-        fontFamily: 'DMSerifText',
-        lineHeight: 30,
-    },
-    optionsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 16,
-        marginTop: 8,
-    },
+  container: {
+    marginVertical: 12,
+  },
+  heading: {
+    fontSize: 20,
+    fontFamily: 'DMSerifText',
+    lineHeight: 30,
+  },
+  optionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+    marginTop: 8,
+  },
 });

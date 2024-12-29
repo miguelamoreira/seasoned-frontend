@@ -9,7 +9,7 @@ import OptionsTab from '@/components/OptionsTab';
 import EmptyState from '@/components/EmptyState';
 import Menu from '@/components/users/Menu';
 
-const TABS = [
+const TABS: { label: string; icon: string; library: "FontAwesome" | "AntDesign" }[] = [
     { label: 'Following', icon: 'bookmark', library: 'FontAwesome' },
     { label: 'Watched', icon: 'eye', library: 'AntDesign' },
     { label: 'Watchlist', icon: 'clockcircle', library: 'AntDesign' },
@@ -94,14 +94,19 @@ const showsData: Record<string, Show[] | Record<WatchlistFilterType, Show[]>> = 
     ],
 };
 
-export default function ShowsScreen() {
-    const { userId } = useLocalSearchParams<{ userId: string }>();
+export default function UsersShowsScreen() {
+    const { userId, activeTab: initialActiveTab } = useLocalSearchParams<{ userId: string; activeTab: string }>();
     const router = useRouter();
 
-    const [activeTab, setActiveTab] = useState<string>('Following');
+    const [activeTab, setActiveTab] = useState<'Following' | 'Watched' | 'Watchlist' | 'Dropped'>(
+            (initialActiveTab as 'Following' | 'Watched' | 'Watchlist' | 'Dropped') || 'Following'
+        );
     const [watchlistFilter, setWatchlistFilter] = useState<WatchlistFilterType>('Released');
 
-    const handleTabPress = (label: string) => setActiveTab(label);
+    const handleTabPress = (tab: string) => {
+        console.log('Tab Pressed:', tab); 
+        setActiveTab(tab as 'Following' | 'Watched' | 'Watchlist' | 'Dropped');
+    };
     const handleFilterPress = (filter: WatchlistFilterType) => setWatchlistFilter(filter);
 
     const renderShows = () => {
