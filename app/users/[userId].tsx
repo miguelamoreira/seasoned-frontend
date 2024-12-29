@@ -105,12 +105,13 @@ export default function UserProfileScreen() {
     ];
 
     const userShowsOptions = [
-        { label: 'following', action: () => console.log('following pressed') },
-        { label: 'watched', action: () => console.log('watched pressed') },
-        { label: 'watchlist', action: () => console.log('watchlist pressed') },
-        { label: 'dropped', action: () => console.log('dropped pressed') },
+      { label: 'following', action: () => handleShowOptionPress(userId, 'following') },
+      { label: 'watched', action: () => handleShowOptionPress(userId, 'watched') },
+      { label: 'watchlist', action: () => handleShowOptionPress(userId, 'watchlist') },
+      { label: 'dropped', action: () => handleShowOptionPress(userId, 'dropped') },
     ];
-
+  
+  
     const userActivityOptions = [
         { label: 'reviews', action: () => console.log('reviews pressed') },
         { label: 'likes', action: () => console.log('likes pressed') },
