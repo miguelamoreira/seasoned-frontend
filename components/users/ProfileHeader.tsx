@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 import Icon from 'react-native-vector-icons/AntDesign';
+import { useRouter } from 'expo-router';
 
 import ProfileModal from './ProfileModal';
 
@@ -20,6 +21,7 @@ type ProfileHeaderProps = {
 export default function ProfileHeader({ type, username, followers, following, profileImage, onEditProfile, onSaveProfile, onSettingsPress, onGridPress }: ProfileHeaderProps) {
     const [editedUsername, setEditedUsername] = useState(username);
     const [isProfileModalVisible, setIsProfileModalVisible] = useState(false); 
+    const router = useRouter();
 
     const handleSave = () => {
       onSaveProfile(editedUsername);
@@ -32,6 +34,21 @@ export default function ProfileHeader({ type, username, followers, following, pr
     const closeProfileModal = () => {
       setIsProfileModalVisible(false);
     };
+
+    const handleFollowersPress = (userId: number) => {
+      router.push({
+          pathname: `/users/${userId}/followers`,
+          params: { activeTab: 'Followers' },
+        });
+    };
+    
+    const handleFollowingPress = (userId: number) => {
+        router.push({
+            pathname: `/users/${userId}/followers`,
+            params: { activeTab: 'Following' },
+        });
+    };
+  
 
     return (
       <View style={styles.headerContainer}>
@@ -67,8 +84,8 @@ export default function ProfileHeader({ type, username, followers, following, pr
         ) : (
           <View style={styles.profileInfoContainer}>
             <Text style={styles.username}>{username}</Text>
-            <Text style={styles.followsInfo}>{followers} Followers</Text>
-            <Text style={styles.followsInfo}>{following} Following</Text>
+            <Text style={styles.followsInfo} onPress={handleFollowersPress}>{followers} Followers</Text>
+            <Text style={styles.followsInfo} onPress={handleFollowingPress}>{following} Following</Text>
           </View>
         )}
 
@@ -94,7 +111,6 @@ export default function ProfileHeader({ type, username, followers, following, pr
             )}
           </View>
 
-          {/* QR Code Icon (only in profile mode) */}
           {type === 'profile' && (
             <View style={styles.qrCodeContainer}>
               <Shadow distance={1} startColor={'#211B17'} offset={[1, 2]}>
@@ -108,6 +124,14 @@ export default function ProfileHeader({ type, username, followers, following, pr
             </View>
           )}
         </View>
+
+        <ProfileModal 
+          isVisible={isProfileModalVisible}
+          onClose={closeProfileModal}
+          onTakePicture={() => console.log('Take picture pressed')}
+          onSelectFromGallery={() => console.log('Select from gallery pressed')}
+          onRemoveAvatar={() => console.log('Remove avatar pressed')}
+        ></ProfileModal>
       </View>
     );
 }

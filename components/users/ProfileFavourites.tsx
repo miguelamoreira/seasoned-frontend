@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import {Shadow} from 'react-native-shadow-2'; 
+import { FontAwesome } from '@expo/vector-icons';
 
 type Show = {
     id: string;
@@ -28,7 +29,7 @@ export default function ProfileFavourites({ shows, type, onAddShow, onRemoveShow
                         return (
                             <Shadow key={item.id} distance={2} startColor={'#211B17'} offset={[2, 4]}>
                                 <TouchableOpacity style={styles.addNewItem} onPress={onAddShow}>
-                                    <Text style={styles.addIcon}>+</Text>
+                                    <FontAwesome name="plus" size={48} color="#6A4A36" />
                                 </TouchableOpacity>
                             </Shadow>
                         );
@@ -40,7 +41,7 @@ export default function ProfileFavourites({ shows, type, onAddShow, onRemoveShow
                                 <Image style={styles.showImage} source={{ uri: item.image }} />
                                 {type === 'edit' && (
                                     <TouchableOpacity style={styles.removeButton} onPress={() => onRemoveShow?.(item.id)}>
-                                        <Text style={styles.removeIcon}>×</Text>
+                                        <FontAwesome name="close" size={48} color="#6A4A36" />
                                     </TouchableOpacity>
                                 )}
                             </View>
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     },
     removeButton: {
         position: 'absolute',
-        top: -28,
+        top: -20,
         right: -20,
         width: 48,
         height: 48,

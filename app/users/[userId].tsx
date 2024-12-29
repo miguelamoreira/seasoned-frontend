@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, FlatList, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 import OptionsTab from '@/components/OptionsTab';
 import ProfileHeader from '@/components/users/ProfileHeader';
@@ -73,6 +73,7 @@ const userGenres = ['Drama', 'Action', 'Thriller', 'Comedy', 'Adventure', 'Fanta
 
 export default function UserProfileScreen() {
     const router = useRouter();
+    const { userId } = useLocalSearchParams<{ userId: string }>();
     const [type, setType] = useState<'profile' | 'edit'>('profile');
     const [isViewingOtherUser, setIsViewingOtherUser] = useState(false);
 
@@ -87,6 +88,10 @@ export default function UserProfileScreen() {
     const toggleViewOtherUser = (id: number) => {
       router.push(`/users/${id}`);
     };
+
+    const handleAddShow = () => {
+      router.push((`/users/${userId}/favourites`))
+    }
 
     const sections = [
         'header',
@@ -136,7 +141,7 @@ export default function UserProfileScreen() {
               profileImage={user.avatar}
               onEditProfile={handleEditProfile}
               onSettingsPress={() => console.log('Settings Pressed')}
-              onGridPress={() => console.log('Grid Pressed')}
+              onGridPress={() => router.push(`/users/${userId}/qrcode`)}
               type={type}
               onSaveProfile={handleSaveProfile}
             />
@@ -144,7 +149,6 @@ export default function UserProfileScreen() {
         }
       }
   
-      // Render other sections as before
       switch (item) {
         case 'stats':
           return <ProfileStats stats={user.statsData} type={type} />;
@@ -153,7 +157,7 @@ export default function UserProfileScreen() {
             <ProfileFavourites
               type={type}
               shows={user.favourites}
-              onAddShow={() => console.log('Add Show Pressed')}
+              onAddShow={handleAddShow}
               onRemoveShow={(id) => console.log(`Remove Show with ID: ${id}`)}
             />
           );
@@ -164,29 +168,9 @@ export default function UserProfileScreen() {
         case 'ratings':
           return <RatingDisplay type={type} ratings={[1, 3, 5, 15, 6]} average={4.5} />;
         case 'userShows':
-          return (
-            <ProfileOptions
-              type={type}
-              title="User's shows"
-              options={[
-                { label: 'following', action: () => console.log('following pressed') },
-                { label: 'watched', action: () => console.log('watched pressed') },
-                { label: 'watchlist', action: () => console.log('watchlist pressed') },
-                { label: 'dropped', action: () => console.log('dropped pressed') },
-              ]}
-            />
-          );
+          return <ProfileOptions type={type} title="User's shows" options={userShowsOptions}/>;
         case 'userActivity':
-          return (
-            <ProfileOptions
-              type={type}
-              title="User's activity"
-              options={[
-                { label: 'reviews', action: () => console.log('reviews pressed') },
-                { label: 'likes', action: () => console.log('likes pressed') },
-              ]}
-            />
-          );
+          return <ProfileOptions type={type} title="User's activity" options={userActivityOptions}/>;
         default:
           return null;
       }

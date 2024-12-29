@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Shadow } from 'react-native-shadow-2';
@@ -18,84 +18,75 @@ type UsersProps = {
 };
 
 export default function UsersDisplay({ users, currentUser, type }: UsersProps) {
-    const [updatedUsers, setUpdatedUsers] = useState(users); 
+    const [updatedUsers, setUpdatedUsers] = useState(users);
+
+    useEffect(() => {
+        setUpdatedUsers(users);
+    }, [users]);
 
     const handleFollowUnfollow = (userId: number) => {
         setUpdatedUsers((prevUsers) =>
-        prevUsers.map((user) => {
-            if (user.id === userId) {
-            return {
-                ...user,
-                following: !user.following,
-            };
-            }
-            return user;
-        })
+            prevUsers.map((user) =>
+                user.id === userId ? { ...user, following: !user.following } : user
+            )
         );
     };
 
     const handleRemoveFollower = (followerId: number) => {
-        const followerIndex = updatedUsers.findIndex((user) => user.id === followerId);
-    
-        if (followerIndex !== -1) {
-          const follower = { ...updatedUsers[followerIndex] };
-    
-          follower.following = false; 
-    
-          setUpdatedUsers([
-            ...updatedUsers.slice(0, followerIndex), 
-            follower, 
-            ...updatedUsers.slice(followerIndex + 1) 
-          ]);
-        }
-      };
-    
+        setUpdatedUsers((prevUsers) => prevUsers.filter((user) => user.id !== followerId));
+    };
+
     const renderUser = ({ item }: { item: User }) => (
         <View style={styles.userContainer}>
             <View style={styles.userDetails}>
                 <Shadow distance={2} startColor={'#211B17'} offset={[2, 4]}>
                     <Image source={{ uri: item.image }} style={styles.userImage} />
                 </Shadow>
-                <Text style={styles.userName}>
-                    {item.username}
-                </Text>
+                <Text style={styles.userName}>{item.username}</Text>
             </View>
             <View style={styles.userOptions}>
-                { type === 'search' && (
+                {type === 'search' && (
                     <TouchableOpacity onPress={() => handleFollowUnfollow(item.id)}>
                         <Icon
-                        name={item.following ? 'user-times' : 'user-plus'}
-                        size={20}
-                        color="#D8A84E"
-                    />
+                            name={item.following ? 'user-times' : 'user-plus'}
+                            size={20}
+                            color="#D8A84E"
+                        />
                     </TouchableOpacity>
-                )
-                }
+                )}
                 {type === 'profile' && (
-                <>
-                    {currentUser && currentUser.id === item.id ? ( 
-                    <Shadow distance={1} startColor={'#211B17'} offset={[2, 4]}>
-                        <TouchableOpacity onPress={() => handleRemoveFollower(item.id)} style={styles.button}> 
-                            <Text style={styles.buttonText}>Remove</Text> 
-                        </TouchableOpacity>
-                    </Shadow>
-                    ) : (
-                    <Shadow distance={1} startColor={'#211B17'} offset={[2, 4]}>
-                        <TouchableOpacity onPress={() => handleFollowUnfollow(item.id)} style={styles.button}> 
-                            <Text style={styles.buttonText}>{item.following ? 'Unfollow' : 'Follow'}</Text> 
-                        </TouchableOpacity>
-                    </Shadow>
-                    )}
-                </>
+                    <>
+                        {currentUser && currentUser.id === item.id ? (
+                            <Shadow distance={1} startColor={'#211B17'} offset={[2, 4]}>
+                                <TouchableOpacity
+                                    onPress={() => handleRemoveFollower(item.id)}
+                                    style={styles.button}
+                                >
+                                    <Text style={styles.buttonText}>Remove</Text>
+                                </TouchableOpacity>
+                            </Shadow>
+                        ) : (
+                            <Shadow distance={1} startColor={'#211B17'} offset={[2, 4]}>
+                                <TouchableOpacity
+                                    onPress={() => handleFollowUnfollow(item.id)}
+                                    style={styles.button}
+                                >
+                                    <Text style={styles.buttonText}>
+                                        {item.following ? 'Unfollow' : 'Follow'}
+                                    </Text>
+                                </TouchableOpacity>
+                            </Shadow>
+                        )}
+                    </>
                 )}
             </View>
         </View>
     );
-    
+
     return (
         <FlatList
             data={updatedUsers}
-            keyExtractor={(item, index) => `${item.id}-${index}`}
+            keyExtractor={(item) => `${item.id}`}
             renderItem={renderUser}
             contentContainerStyle={styles.listContainer}
             showsVerticalScrollIndicator={false}
@@ -126,15 +117,15 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 40,
         borderWidth: 2,
-        borderColor: '#211B17'
+        borderColor: '#211B17',
     },
     userName: {
         fontSize: 16,
         fontWeight: 'bold',
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     userOptions: {
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     button: {
         backgroundColor: '#D8A84E',

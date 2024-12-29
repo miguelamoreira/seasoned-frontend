@@ -31,15 +31,9 @@ export default function SearchBar({ onFocus, onBlur, onChange }: SearchBarProps)
 
 const styles = StyleSheet.create({
     searchBarContainer: {
-        position: 'absolute',
-        top: 42,
-        left: 0,
-        right: 0,
         zIndex: 10,
         backgroundColor: '#FFF4E0',
-        paddingTop: 16,
         paddingBottom: 8,
-        paddingHorizontal: 16,
     },
     searchBar: {
         flexDirection: 'row',

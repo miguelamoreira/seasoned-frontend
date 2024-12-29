@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFF4E0',
         paddingHorizontal: 16,
-        paddingTop: 100,
+        paddingTop: 42,
     },
     suggestionsContainer: {
         flex: 1,

@@ -28,6 +28,7 @@ export default function TabMenu({ tabs, activeTab, onTabPress, isLoggedIn }: Tab
                 const TabContent = (
                     <TouchableOpacity key={index} onPress={() => onTabPress(tab.label)}
                         style={[ styles.tab, isActive ? styles.activeTab : styles.inactiveTab ]}
+                        activeOpacity={0.9}
                     >
                         <Icon name={tab.icon} size={20} style={styles.tabIcon} />
                         <Text style={[styles.tabText, isActive && styles.activeTabText]}>
