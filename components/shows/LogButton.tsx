@@ -126,7 +126,7 @@ export default function LogButton({ onModalToggle, navigation, type }: LogButton
                 </Shadow>
             </View>
 
-            <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={closeModal}>
+            <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={closeModal} statusBarTranslucent={true}>
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.modalHeader}>

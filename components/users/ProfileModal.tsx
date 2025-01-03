@@ -12,7 +12,7 @@ type ProfileModalProps = {
 
 export default function ProfileModal({ isVisible, onClose, onTakePicture, onSelectFromGallery, onRemoveAvatar }: ProfileModalProps) {
     return (
-        <Modal animationType="slide" transparent visible={isVisible} onRequestClose={onClose}>
+        <Modal animationType="slide" transparent visible={isVisible} onRequestClose={onClose} statusBarTranslucent={true}>
         <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
             <View style={styles.header}>
